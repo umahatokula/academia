@@ -26,6 +26,9 @@ Route::group(['middleware' => 'login'], function(){
 	//Home Route
 	Route::resource('/', 'homeController');
 
+
+	//Ressults
+	Route::post('academics/results/fetchSheet', array('as'=> 'fetchSheet', 'uses' => 'resultsController@fetchSheet'));
 	Route::resource('academics/results', 'resultsController');
 
 	Route::resource('admin/parents', 'parentsController');
@@ -40,6 +43,10 @@ Route::group(['middleware' => 'login'], function(){
 	//============================================================|
 
 	Route::group(['middleware' => ['super_administrator']], function(){
+		
+		//Subjects
+		Route::resource('settings/subjects', 'subjectsController');
+
 		//Class
 		Route::resource('settings/classes', 'classesController');
 

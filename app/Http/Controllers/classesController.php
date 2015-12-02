@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 
 use \App\StudentClass;
 use \App\Staff;
+use \App\Subject;
 
 class classesController extends Controller
 {
@@ -20,6 +21,7 @@ class classesController extends Controller
      */
     public function index()
     {
+        $data['title'] = 'Class';
         $data['classes'] = StudentClass::all();
         return view('settings.class.index', $data);
     }
@@ -31,7 +33,9 @@ class classesController extends Controller
      */
     public function create()
     {
-        $data['staffs'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->where('staff_type_id', 1)->lists('full_name', 'id');
+        $data['title'] = 'Class';
+        $data['staffs'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->where('staff_type_id', 1)->lists('full_name', 'id')->prepend('Please Select');
+        $data['subjects'] = Subject::lists('subject', 'id')->prepend('Please Select');
         return view('settings.class.create', $data);
     }
 
@@ -43,9 +47,22 @@ class classesController extends Controller
      */
     public function store(createClassRequest $request)
     {
-
+        // dd($request->all());
         $class = new StudentClass;
-        $class->create($request->all());
+        $class->name = $request->name;
+        $class->staff_id = $request->staff_id;
+        $class->max_students = $request->max_students;
+        $class->save();
+
+        for ($i=0; $i < count($request->subject_id) ; $i++) { 
+            $record = \DB::table('class_subject')->where('class_id', $class->id)->where('subject_id', $request->subject_id[$i])->first();
+            if (is_null($record)) {
+                \DB::table('class_subject')->insert(
+                    array('class_id' => $class->id, 'subject_id' => $request->subject_id[$i], 'staff_id' => $request->staff[$i])
+                    );
+            }
+            
+        }
 
         session()->flash('flash_message', 'Class successfully created.');
         session()->flash('flash_message_important', true);

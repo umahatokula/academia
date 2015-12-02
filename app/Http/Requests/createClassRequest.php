@@ -23,11 +23,33 @@ class createClassRequest extends Request
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'          => 'required|unique:classes,name', 
             'max_students'  => 'integer|required'
         ];
+
+          foreach($this->request->get('staff') as $key => $val)
+          {
+            $rules['staff.'.$key] = 'required|min:1';
+          }
+
+          return $rules;
+
     }
+
+
+
+    public function messages()
+    {
+      $messages = [];
+      foreach($this->request->get('staff') as $key => $val)
+      {
+        $messages['staff.'.$key.'.max'] = 'The field labeled "Subject '.$key.'" must be less than :max characters.';
+      }
+      return $messages;
+    }
+
+
 
     public function all(){
         $attributes = parent::all();

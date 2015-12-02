@@ -40,12 +40,12 @@ class parentsController extends Controller
     public function create()
     {
         $data['title'] = 'Add Parent';
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['religions'] = Religion::lists('religion', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['religions'] = Religion::lists('religion', 'id')->prepend('Please Select');
         return view('admin.parents.create', $data);
     }
 
@@ -89,12 +89,12 @@ class parentsController extends Controller
     {
         $data['parent'] = StudentParent::find($id);
         $data['title'] = 'Add Parent';
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['religions'] = Religion::lists('religion', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['religions'] = Religion::lists('religion', 'id')->prepend('Please Select');
         return view('admin.parents.edit', $data);
     }
 

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use \App\Staff;
+
 class resultsController extends Controller
 {
     /**
@@ -16,7 +18,14 @@ class resultsController extends Controller
      */
     public function index()
     {
-        //
+        $data['title'] = 'Result Sheet';
+        $staff = Staff::find(\Session::get('user')->staff_id);
+        $classes = array();
+        foreach ($staff->classes as  $class) {
+            $classes[$class->id] = $class->name;
+        }
+        $data['classes'] = $classes;
+        return view('academics.results.index', $data);
     }
 
     /**
@@ -48,7 +57,7 @@ class resultsController extends Controller
      */
     public function show($id)
     {
-        //
+        dd($id);
     }
 
     /**
@@ -83,5 +92,9 @@ class resultsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fetchSheet(Request $request){
+        dd($request);
     }
 }

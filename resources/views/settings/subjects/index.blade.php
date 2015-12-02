@@ -16,7 +16,7 @@
               </div>
             </div>
           <div class="panel-body">
-            <a href="{!! route('settings.classes.create') !!}"  class="btn btn-secondary btn-sx">add class</a>
+            <a href="{!! route('settings.subjects.create') !!}"  class="btn btn-secondary btn-sx">add subject</a>
           </div>
           </div>
         </div>
@@ -26,7 +26,7 @@
       
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">All classes</h3>
+              <h3 class="panel-title">All Subjects</h3>
               <div class="panel-options">
                 <a href="#" data-toggle="panel">
                   <span class="collapse-icon">&ndash;</span>
@@ -42,23 +42,21 @@
               <thead>
                 <tr>
                   <td style="text-align:center">S/N</td>
-                  <td style="text-align:center">Name</td>
-                  <td style="text-align:center">Head Teacher</td>
-                  <td style="text-align:center">Max Students</td>
+                  <td style="text-align:center">Subject</td>
+                  <td style="text-align:center">Status</td>
                   <td style="text-align:center">Actions</td>
                 </tr>
               </thead>
               <tbody><?php $counter=1 ?>
-                @foreach($classes as $class)
+                @foreach($subjects as $subject)
                 <tr>
                   <td style="text-align:center">{!! $counter !!}</td>
-                  <td>{!! $class->name !!}</td>
-                  <td>
-                    <a href="{!! route('admin.staff.show', array($class->staff->id)) !!}">
-                      {!! $class->staff->fname.' '.$class->staff->fname !!}
-                    </a>
+                  <td>{!! $subject->subject !!}</td>
+                  <td style="text-align:center">
+                    <div class="label {{ $subject->status_id == 1? 'label-success': '' }}{{ $subject->status_id == 2? 'label-danger': '' }}">
+                    {!! $subject->status->status !!}
+                    </div>
                   </td>
-                  <td style="text-align:center">{!! $class->max_students !!}</td>
                   <td style="text-align:center">
                     <div class="btn-group right-dropdown">
                             <button type="button" class="btn btn-blue btn-sm">List of Actions</button>
@@ -67,7 +65,7 @@
                             </button>
                             
                             <ul class="dropdown-menu dropdown-blue" role="menu">
-                              <li><a href="{!! route('settings.classes.edit', array($class->id)) !!}" data-target="#basicModal" data-toggle="modal">Edit</a>
+                              <li><a href="{!! route('settings.subjects.edit', array($subject->id)) !!}" data-target="#basicModal" data-toggle="modal">Edit</a>
                               </li>
                               <li><a href="#">Deactivate</a>
                               </li>

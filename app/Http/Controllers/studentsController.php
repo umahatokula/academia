@@ -41,14 +41,14 @@ class studentsController extends Controller
     public function create()
     {
         $data['title'] = 'Students';
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['parents'] = StudentParent::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
-        $data['classes'] = StudentClass::lists('name', 'id');
-        $data['religions'] = Religion::lists('religion', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['parents'] = StudentParent::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id')->prepend('Please Select');
+        $data['classes'] = StudentClass::lists('name', 'id')->prepend('Please Select');
+        $data['religions'] = Religion::lists('religion', 'id')->prepend('Please Select');
         return view('admin.students.create', $data);
     }
 
@@ -92,14 +92,14 @@ class studentsController extends Controller
         $data['student'] = Student::find($id);
 
         $data['title'] = 'Edit '.$data['student']->fname;
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['parents'] = StudentParent::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
-        $data['classes'] = StudentClass::lists('name', 'id');
-        $data['religions'] = Religion::lists('religion', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['parents'] = StudentParent::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id')->prepend('Please Select');
+        $data['classes'] = StudentClass::lists('name', 'id')->prepend('Please Select');
+        $data['religions'] = Religion::lists('religion', 'id')->prepend('Please Select');
 
         return view('admin.students.edit', $data);
     }

@@ -22,7 +22,10 @@ class staffTableSeeder extends Seeder
 		            'phone'         => '08055271439',
 		            'address'      	=> 'No 7 Canaan Str, GRA, Gboko, Benue State',
 		            'gender_id'    	=> '1',
-		            'staff_type_id' => '1'
+		            'staff_type_id' => '1',
+		            'country_id' 	=> '1',
+		            'state_id' 		=> '1',
+		            'local_id' 		=> '1'
 		        ));
     }
 }

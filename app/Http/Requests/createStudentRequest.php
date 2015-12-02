@@ -41,12 +41,12 @@ class createStudentRequest extends Request
 
 
 
-    public function all(){
-        $arrtributes = parent::all();
+    // public function all(){
+    //     $arrtributes = parent::all();
 
-        unset($arrtributes['_token']);
+    //     unset($arrtributes['_token']);
 
-        return $arrtributes;
-    }
+    //     return $arrtributes;
+    // }
 
 }

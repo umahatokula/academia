@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \App\Http\Requests\createSubjectRequest;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use \App\Helpers\Helper;
+use \App\Subject;
 
-class homeController extends Controller
+class subjectsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +19,9 @@ class homeController extends Controller
      */
     public function index()
     {
-        $data['title'] = 'Home';
-        return view('dashboard', $data);
+        $data['title'] = 'Subjects';
+        $data['subjects'] = Subject::all();
+        return view('settings.subjects.index', $data);
     }
 
     /**
@@ -28,7 +31,8 @@ class homeController extends Controller
      */
     public function create()
     {
-        //
+        $data['title'] = 'Subjects';
+        return view('settings.subjects.create', $data);
     }
 
     /**
@@ -37,9 +41,14 @@ class homeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(createSubjectRequest $request)
     {
-        //
+        $subject = new Subject;
+        $subject->create($request->all());
+
+        session()->flash('flash_message', 'Subject successfully added.');
+
+        return redirect('settings/subjects');
     }
 
     /**
@@ -50,7 +59,9 @@ class homeController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['title'] = 'Subjects';
+        $data['subject'] = Subject::find($id);
+        return view('settings.subjects.show', $data);
     }
 
     /**
@@ -61,7 +72,9 @@ class homeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['title'] = 'Subjects';
+        $data['subject'] = Subject::find($id);
+        return view('settings.subjects.edit', $data);
     }
 
     /**
@@ -71,9 +84,11 @@ class homeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(createSubjectRequest $request, $id)
     {
-        //
+        $subject = Subject::find($id);
+        $subject->fill($request->all())->save();
+        return redirect('settings/subjects');
     }
 
     /**
@@ -84,10 +99,9 @@ class homeController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $subject= Subject::find($id);
+        $subject->delete();
 
-    public function error(){
-        return view('error');
+        return $this->index();
     }
 }

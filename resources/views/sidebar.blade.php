@@ -80,7 +80,7 @@
             </a>
           </li>
           <li class="opened active">
-            <a href="{!! url('/') !!}">
+            <a href="{!! route('academics.results.index') !!}">
               <i class="linecons-cog"></i>
               <span class="title">Results</span>
             </a>
@@ -117,6 +117,11 @@
               <li>
                 <a href="{!! url('settings/classes/') !!}">
                   <span class="title">Classes</span>
+                </a>
+              </li>
+              <li>
+                <a href="{!! url('settings/subjects/') !!}">
+                  <span class="title">Subjects</span>
                 </a>
               </li>
               <li>

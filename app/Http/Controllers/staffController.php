@@ -37,11 +37,11 @@ class staffController extends Controller
     public function create()
     {
         $data['title'] = 'Add Staff';
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['staff_types'] = StaffType::lists('staff_type', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['staff_types'] = StaffType::lists('staff_type', 'id')->prepend('Please Select');
         return view('admin.staff.create', $data);
     }
 
@@ -81,11 +81,11 @@ class staffController extends Controller
     {
         $data['staff'] = Staff::find($id);
         // dd($data['staff']);
-        $data['gender'] = Gender::lists('gender', 'id');
-        $data['countries'] = Country::lists('name', 'id');
-        $data['states'] = State::lists('name', 'id');
-        $data['locals'] = Local::lists('local_name', 'id');
-        $data['staff_types'] = StaffType::lists('staff_type', 'id');
+        $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
+        $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
+        $data['states'] = State::lists('name', 'id')->prepend('Please Select');
+        $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
+        $data['staff_types'] = StaffType::lists('staff_type', 'id')->prepend('Please Select');
         return view('admin.staff.edit', $data);
     }
 

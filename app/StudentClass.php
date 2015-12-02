@@ -22,4 +22,8 @@ class StudentClass extends Model
     public function staff(){
     	return $this->belongsTo('\App\Staff');
     }
+
+    public function subjects(){
+        return $this->belongsToMany('\App\Subject', 'class_subject', 'class_id', 'subject_id');
+    }
 }
