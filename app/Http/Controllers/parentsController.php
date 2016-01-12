@@ -28,6 +28,7 @@ class parentsController extends Controller
     public function index()
     {
         $data['title'] = 'Parents';
+        $data['parents_menu'] = 1;
         $data['parents'] = StudentParent::all();
         return view('admin.parents.index', $data);
     }
@@ -40,6 +41,7 @@ class parentsController extends Controller
     public function create()
     {
         $data['title'] = 'Add Parent';
+        $data['parents_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
         $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
@@ -57,9 +59,36 @@ class parentsController extends Controller
      */
     public function store(createParentRequest $request)
     {
-        $parent = new StudentParent;
+        // dd($request->picture);
+        //try to submit to db
+        try{
+        $parent = StudentParent::create($request->except('picture'));
+        }catch (\Illuminate\Database\QueryException $e){
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    session()->flash('flash_message', 'Email is already registered for another parent.');
+                    return \Redirect::back()->withInput($request->all());
+                }
+            }
 
-        $parent->create($request->all());
+        //check if picture was uploaded for this parent
+        if(null !== $request->picture){
+
+            if($request->picture->getClientOriginalExtension() == 'jpg'){
+
+                $imageName = $parent->id.'.'.$request->picture->getClientOriginalExtension();
+
+                $request->picture->move(base_path().'/public/assets/images/parents/', $imageName);
+
+            }else{
+
+                session()->flash('flash_message', 'Only .jpg images are allowed.');
+
+                return redirect()->back()->withInput();
+            }
+            
+        }
+
 
         session()->flash('flash_message', 'Parent successfully registered.');
         session()->flash('flash_message_important', true);
@@ -76,6 +105,7 @@ class parentsController extends Controller
     public function show($id)
     {
         $data['parent'] = StudentParent::find($id);
+        $data['parents_menu'] = 1;
         return view('admin.parents.show', $data);
     }
 
@@ -88,6 +118,7 @@ class parentsController extends Controller
     public function edit($id)
     {
         $data['parent'] = StudentParent::find($id);
+        $data['parents_menu'] = 1;
         $data['title'] = 'Add Parent';
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');

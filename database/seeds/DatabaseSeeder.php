@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
             // $this->call(UserTableSeeder::class);
-            // $this->call('CountriesSeeder');
+            $this->call('CountriesSeeder');
             // $this->call('\GenderTableSeeder');
             // $this->call('\AgeGroupTableSeeder');
             // $this->call('\StateTableSeeder');
@@ -25,7 +25,10 @@ class DatabaseSeeder extends Seeder
             // $this->call('\staffTableSeeder');
             // $this->call('\staffTypeTableSeeder');
             // $this->call('\StatusTableSeeder');
-            $this->call('\religionTableSeeder');
+            // $this->call('\religionTableSeeder');
+            // $this->call('\TermsTableSeeder');
+            // $this->call('\SchoolSessionsTableSeeder');
+            // $this->call('\bankTableSeeder');
             $this->command->info('Tables seeded!');
 
         Model::reguard();

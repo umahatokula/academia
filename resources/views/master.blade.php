@@ -74,33 +74,39 @@ if(null !== \Session::get('message')){ ?>
       </script>
       
       <script type="text/javascript">
+
+          var sample_notification;
         
           jQuery(document).ready(function($)
           {
               
           // Notifications
-          // window.clearTimeout(sample_notification);
+          window.clearTimeout(sample_notification);
           
-          // var notification = setTimeout(function()
-          // {     
-          //   var opts = {
-          //     "closeButton": true,
-          //     "debug": false,
-          //     "positionClass": "toast-top-right toast-default",
-          //     "toastClass": "black",
-          //     "onclick": null,
-          //     "showDuration": "100",
-          //     "hideDuration": "1000",
-          //     "timeOut": "5000",
-          //     "extendedTimeOut": "1000",
-          //     "showEasing": "swing",
-          //     "hideEasing": "linear",
-          //     "showMethod": "fadeIn",
-          //     "hideMethod": "fadeOut"
-          //   };
+          var notification = setTimeout(function()
+          {     
+            var opts = {
+              "closeButton": true,
+              "debug": false,
+              "positionClass": "toast-top-right toast-default",
+              "toastClass": "black",
+              "onclick": null,
+              "showDuration": "100",
+              "hideDuration": "1000",
+              "timeOut": "5000",
+              "extendedTimeOut": "1000",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            };
+
+            @if(\Session::has('flash_message'))
+              toastr.info("{!! session('flash_message') !!}", "Attention", opts);
+            @endif
         
-          //   toastr.info("Enjoy the varieties of layouts, UI features and flexibility of clean coding.", "Welcome to Xenon Admin Theme", opts);
-          // }, 3800); 
+            
+          }, 3800); 
               
           if( ! $.isFunction($.fn.dxChart))
             return;
@@ -302,7 +308,7 @@ if(null !== \Session::get('message')){ ?>
         
       </script>
 
-      @if(\Session::has('flash_message'))
+     <!--  @if(\Session::has('flash_message'))
         <div class="alert alert-success {!! \Session::has('flash_message_important') ? 'alert-important' : '' !!}">
           @if(\Session::has('flash_message_important'))
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -310,7 +316,7 @@ if(null !== \Session::get('message')){ ?>
           
           {!! session('flash_message') !!}
         </div>
-      @endif
+      @endif -->
       
       @yield('body')
 
@@ -320,7 +326,7 @@ if(null !== \Session::get('message')){ ?>
       <!-- Or class "fixed" to  always fix the footer to the end of page -->
       @include('footer')
       <script type="text/javascript">
-        $('div.alert').not('alert-important').delay(6000).slideUp(300);
+        $('div.alert').not('.alert-important').delay(6000).slideUp(300);
       </script>
     </div>
 
@@ -398,7 +404,7 @@ if(null !== \Session::get('message')){ ?>
 
   <!-- Bottom Scripts -->
   @include('js_include')
-
+  {!! Toastr::render() !!}
 
   @section('page_js')
 
@@ -410,6 +416,12 @@ if(null !== \Session::get('message')){ ?>
   $('body').on('hidden.bs.modal', '.modal', function () {
       $(this).removeData('bs.modal');
   });
+
+  // Print modal content only
+  function printModal(id){
+    $('#'+id).printElement();
+  }
+  
   </script>
 
 

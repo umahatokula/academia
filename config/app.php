@@ -150,6 +150,9 @@ return [
         'Webpatser\Countries\CountriesServiceProvider',
         Nqxcode\LuceneSearch\ServiceProvider::class,
         'GrahamCampbell\Exceptions\ExceptionsServiceProvider',
+        'App\Providers\AppServiceProvider',
+        'Kamaln7\Toastr\ToastrServiceProvider',
+        'nilsenj\Toastr\ToastrServiceProvider',
 
     ],
 
@@ -208,6 +211,8 @@ return [
         'Countries' => 'Webpatser\Countries\CountriesFacade',
         'Helpers'   => 'App\Helpers\Helpers',
         'Search' => Nqxcode\LuceneSearch\Facade::class,
+        // 'Toastr' => 'Kamaln7\Toastr\Facades\Toastr',
+        'Toastr' => 'nilsenj\Toastr\Facades\Toastr',
 
     ],
 

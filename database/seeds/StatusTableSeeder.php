@@ -42,5 +42,9 @@ class StatusTableSeeder extends Seeder
 		Status::create(array(
 		            'status'         => 'unpaid'
 		        ));
+
+		Status::create(array(
+		            'status'         => 'processed'
+		        ));
     }
 }

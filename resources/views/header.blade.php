@@ -314,7 +314,7 @@
       
           <li class="dropdown user-profile">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{!! asset('assets/images/user-4.png') !!}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
+              <img src="{!! asset('assets/images/staff/'.\Session::get('user')->staff_id.'.jpg') !!}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
               <span>
                 {!! Sentinel::getUser()->first_name !!}
                 <i class="fa-angle-down"></i>

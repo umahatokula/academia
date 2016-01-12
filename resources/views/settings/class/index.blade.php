@@ -67,7 +67,7 @@
                             </button>
                             
                             <ul class="dropdown-menu dropdown-blue" role="menu">
-                              <li><a href="{!! route('settings.classes.edit', array($class->id)) !!}" data-target="#basicModal" data-toggle="modal">Edit</a>
+                              <li><a href="{!! route('settings.classes.edit', array($class->id)) !!}">Edit</a>
                               </li>
                               <li><a href="#">Deactivate</a>
                               </li>

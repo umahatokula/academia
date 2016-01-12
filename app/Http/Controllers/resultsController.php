@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use \App\Staff;
+use \App\Student;
+use \App\studentClass;
 
 class resultsController extends Controller
 {
@@ -19,8 +21,9 @@ class resultsController extends Controller
     public function index()
     {
         $data['title'] = 'Result Sheet';
+        $data['results_menu'] = 1;
         $staff = Staff::find(\Session::get('user')->staff_id);
-        $classes = array();
+        $classes = array('Please select a class');
         foreach ($staff->classes as  $class) {
             $classes[$class->id] = $class->name;
         }
@@ -46,7 +49,7 @@ class resultsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -95,6 +98,35 @@ class resultsController extends Controller
     }
 
     public function fetchSheet(Request $request){
-        dd($request);
+
+        $data['title'] = 'Scoresheet';
+        $data['results_menu'] = 1;
+        // dd($request);
+        if($request->class == 0){
+            session()->flash('flash_message', 'Welcome');
+            // session()->flash('flash_message_important', true);
+            return \Redirect::to('academics/results');
+        }
+
+        $data['class'] = studentClass::where(['id' => $request->class])->first();
+        $data['subjects'] = \DB::table('class_subject')->where(['class_id'=> $request->class])->get();
+        $data['students'] = Student::where(['class_id' => $request->class])->get();
+        return view('academics.results.edit', $data);
     }
+
+
+    public function storeStudentResult(array $Array){
+    $Output = '<ul>';
+    foreach($Array as $Key => $Value){
+        $Output .= "<li><strong>{$Key}: </strong>";
+        if(is_array($Value)){
+            $Output .= makeNestedList($Value);
+        }else{
+            $Output .= $Value;
+        }
+        $Output .= '</li>';
+    }
+    $Output .= '</ul>';
+    return $Output;
+}
 }

@@ -16,7 +16,9 @@
         "webpatser/laravel-countries": "dev-master",
         "nqxcode/laravel-lucene-search": "2.1.*",
         "elasticquent/elasticquent": "dev-master",
-        "graham-campbell/exceptions": "^5.0"
+        "graham-campbell/exceptions": "^5.0",
+        "oriceon/toastr-5-laravel": "dev-master",
+        "nilsenj/toastr-5.1-laravel": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
@@ -25,7 +27,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/Http/Controllers"
         ],
         "psr-4": {
             "App\\": "app/"

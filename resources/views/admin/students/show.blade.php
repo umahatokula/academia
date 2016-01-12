@@ -1,6 +1,6 @@
 @extends('master')
 @section('body')
-<div class="row">
+<div class="row"><?php //dd($student->country->name) ?>
   <div class="panel panel-default">
                       <div class="panel-heading">
                         <h3 class="panel-title">Page Navigation</h3>
@@ -41,7 +41,7 @@
               
               <center>
                 <a href="#" class="user-img">
-                  <img src="{!! asset('assets/images/user-4.png') !!}" alt="user-img" class="img-cirlce img-responsive img-thumbnail" />
+                  <img src="{!! asset('assets/images/students/'.$student->id.'.jpg') !!}" alt="{!! $student->fname !!}" class="img-circle img-responsive img-thumbnail" />
                 </a>
               </center>
               
@@ -50,11 +50,11 @@
               <ul class="list-unstyled user-info-list">
               <li>
                 <i class="fa-home"></i>
-                <b>Class</b>: 
+                <b>Class</b>: {!! $student->studentClass->name !!}
               </li>
               <li>
                 <i class="fa-briefcase"></i>
-                <b>Parent</b>:{!! $student->studentParent->fname.' '.$student->studentParent->lname !!}
+                <b>Parent</b>:<a href="{!! route('admin.parents.show', array($student->studentParent->id)) !!}" data-target="#responsiveModal" data-toggle="modal"> {!! $student->studentParent->fname.' '.$student->studentParent->lname !!}</a>
               </li>
             </ul> 
                 
@@ -81,7 +81,7 @@
                       
                       <tr>
                         <td>Email</td>
-                        <td></td>
+                        <td>{!! $student->email !!}</td>
                       </tr>
 
                       <tr>

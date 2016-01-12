@@ -7,5 +7,29 @@
   <link rel="stylesheet" href="{!! asset('assets/css/xenon-components.css') !!}">
   <link rel="stylesheet" href="{!! asset('assets/css/xenon-skins.css') !!}">
   <link rel="stylesheet" href="{!! asset('assets/css/custom.css') !!}">
+  <link rel="stylesheet" href="{!! asset('assets/css/toastr.min.css') !!}">
 
   <script src="{!! asset('assets/js/jquery-1.11.1.min.js') !!}"></script>
+  <style type="text/css">
+
+  @media screen {
+  #printSection {
+        display: none;
+    }
+  }
+
+  @media print {
+    body * {
+      visibility:hidden;
+    }
+    #printSection, #printSection * {
+      visibility:visible;
+    }
+    #printSection {
+      position:absolute;
+      left:0;
+      top:0;
+    }
+  }
+</style>
+

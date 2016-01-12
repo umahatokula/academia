@@ -41,7 +41,7 @@
               
               <center>
                 <a href="#" class="user-img">
-                  <img src="{!! asset('assets/images/user-4.png') !!}" alt="user-img" class="img-cirlce img-responsive img-thumbnail" />
+                  <img src="{!! asset('assets/images/staff/'.$staff->id.'.jpg') !!}" alt="{!! $staff->id !!}" class="img-cirlce img-responsive img-thumbnail" />
                 </a>
               </center>
               

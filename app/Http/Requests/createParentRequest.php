@@ -28,7 +28,7 @@ class createParentRequest extends Request
             'fname'             => 'min:2|string|required',
             'lname'             => 'min:2|string|required',
             'email'             => 'min:5|email|required',
-            'phone'             => 'integer|min:11|required',
+            'phone'             => 'min:11|required',
             'address'           => 'required',
             'occupation'        => 'required',
             'gender_id'         => 'integer|required',

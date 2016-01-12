@@ -64,8 +64,8 @@
 
                 <div class="form-group-separator"></div>
                 <fieldset>
-                  <legend>Assign techers to subjects</legend>
-                  <div class="col-sm-8">
+                  <legend>Assign teachers to subjects</legend>
+                  <div class="col-sm-12">
                   <table class="table table-striped table-bordered">
                             <thead style="text-align: center;">
                               <td>Subject</td>
@@ -134,7 +134,7 @@
         $.each(staffs, function(key, val) {
             html.push('<option value="'+key+'">'+val+'</option>');
           });
-        html.push('</select></td><td><div class="btn btn-xs btn-red btnDelete">-</div></td><tr>');
+        html.push('</select></td><td><div class="btn btn-xs btn-red btnDelete">-</div></td></tr>');
         //This selector should be some container like dateContainer
         //because you have already give date as id to the above select element
         $('#subjectHooksTeacher').append(html.join(''));

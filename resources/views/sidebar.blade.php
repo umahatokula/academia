@@ -1,4 +1,5 @@
 <div class="sidebar-menu toggle-others fixed">
+<?php //dd(\Session::get('user')->staff_id) ?>
     
       <div class="sidebar-menu-inner">
         
@@ -7,11 +8,11 @@
           <!-- logo -->
           <div class="logo">
             <a href="{!! url('/') !!}" class="logo-expanded">
-              <img src="assets/images/logo@2x.png" width="80" alt="" />
+              <img src="{!! asset('assets/images/logo/1.png') !!}" width="80" alt="" />
             </a>
     
             <a href="{!! url('/') !!}" class="logo-collapsed">
-              <img src="assets/images/logo-collapsed@2x.png" width="40" alt="" />
+              <img src="{!! asset('assets/images/logo-collapsed@2x.png') !!}" width="80" alt="" />
             </a>
           </div>
     
@@ -39,7 +40,7 @@
         <section class="sidebar-user-info" >
           <div class="sidebar-user-info-inner">
             <a href="" class="user-profile">
-              <img src="{!! asset('assets/images/user-4.png') !!}" width="60" height="60" class="img-circle img-corona" alt="user-pic" />
+              <img src="{!! asset('assets/images/staff/'.\Session::get('user')->staff_id.'.jpg') !!}" width="100" height="100" class="img-circle img-corona" alt="user-pic" />
         
               <span>
                 <strong>{!! Sentinel::getUser()->first_name !!}</strong>
@@ -73,58 +74,86 @@
             <ul id="main-menu" class="main-menu">
           <!-- add class "multiple-expanded" to allow multiple submenus to open -->
           <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-          <li class="opened active">
+          <li class="{!! (isset($home))? 'opened active': ''; !!}">
             <a href="{!! url('/') !!}">
               <i class="linecons-cog"></i>
               <span class="title">Dashboard</span>
             </a>
           </li>
-          <li class="opened active">
+          <li class="{!! (isset($results_menu))? 'opened active': ''; !!}">
             <a href="{!! route('academics.results.index') !!}">
               <i class="linecons-cog"></i>
               <span class="title">Results</span>
             </a>
           </li>
-          <li class="opened active">
+          <li class="{!! (isset($students_menu) || isset($parents_menu) || isset($staff_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-cog"></i>
               <span class="title">Admin</span>
             </a>
             <ul>
-              <li>
+              <li class="{!! (isset($students_menu) && $students_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! route('admin.students.index') !!}">
                   <span class="title">Students</span>
                 </a>
               </li>
-              <li>
+              <li class="{!! (isset($parents_menu) && $parents_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! route('admin.parents.index') !!}">
                   <span class="title">Parents</span>
                 </a>
               </li>
-              <li>
+              <li class="{!! (isset($staff_menu) && $staff_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! route('admin.staff.index') !!}">
                   <span class="title">Staff</span>
                 </a>
               </li>
             </ul>
           </li>
-          <li>
+          <li class="{!! (isset($fee_schedules_menu) || isset($fee_elements_menu) || isset($invoice_menu))? 'opened active': ''; !!}">
+            <a href="#">
+              <i class="linecons-desktop"></i>
+              <span class="title">Billing</span>
+            </a>
+            <ul>
+              <li class="{!! (isset($invoice_menu) && $invoice_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('billing/invoices') !!}">
+                  <span class="title">Invoices</span>
+                </a>
+              </li>
+              <li class="{!! (isset($fee_schedules_menu) && $fee_schedules_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('billing/fee_schedules') !!}">
+                  <span class="title">Fee Schedules</span>
+                </a>
+              </li>
+              <li class="{!! (isset($fee_elements_menu) && $fee_elements_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('billing/fee_elements') !!}">
+                  <span class="title">Fee Elements</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="{!! (isset($classes_menu) || isset($subjects_menu) || isset($school_menu) || isset($users_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-desktop"></i>
               <span class="title">Settings</span>
             </a>
             <ul>
-              <li>
+              <li class="{!! (isset($classes_menu) && $classes_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! url('settings/classes/') !!}">
                   <span class="title">Classes</span>
                 </a>
               </li>
-              <li>
+              <li class="{!! (isset($subjects_menu) && $subjects_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! url('settings/subjects/') !!}">
                   <span class="title">Subjects</span>
                 </a>
               </li>
-              <li>
+              <li class="{!! (isset($school_menu) && $school_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('settings/school') !!}">
+                  <span class="title">School Settings</span>
+                </a>
+              </li>
+              <li class="{!! (isset($users_menu) && $users_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! url('settings/users/create') !!}">
                   <span class="title">Users</span>
                 </a>
@@ -135,10 +164,10 @@
                 </a>
               </li>
             </ul>
-              </li>
-            </ul>
           </li>
         </ul>
+      </li>
+    </ul>
         
       </div>
     

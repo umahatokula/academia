@@ -38,7 +38,19 @@
               </div>
             </div>
             <div class="panel-body">
-            <table class="table table-bordered table-stripped">
+          
+          <script type="text/javascript">
+          jQuery(document).ready(function($)
+          {
+            $("#example-1").dataTable({
+              aLengthMenu: [
+                [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+              ]
+            });
+          });
+          </script>
+          
+          <table id="example-1" class="table table-striped table-bordered" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <td style="text-align:center">S/N</td>
@@ -85,8 +97,18 @@
         </div>
 </div>
 @stop
+@section('page_css')
+  <!-- Imported styles on this page -->
+  <link rel="stylesheet" href="{!! asset('assets/js/datatables/dataTables.bootstrap.css') !!}">
+@stop
 @section('page_js')
+  <!-- Imported styles on this page -->
   <script src="{!! asset('assets/js/daterangepicker/daterangepicker.js') !!}"></script>
   <script src="{!! asset('assets/js/datepicker/bootstrap-datepicker.js') !!}"></script>
   <script src="{!! asset('assets/js/timepicker/bootstrap-timepicker.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/js/jquery.dataTables.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/rwd-table/js/rwd-table.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/dataTables.bootstrap.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/tabletools/dataTables.tableTools.min.js') !!}"></script>
 @stop

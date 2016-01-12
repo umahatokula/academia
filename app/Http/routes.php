@@ -44,11 +44,38 @@ Route::group(['middleware' => 'login'], function(){
 
 	Route::group(['middleware' => ['super_administrator']], function(){
 		
+		//Fee Elements
+		Route::get('billing/fee_elements/{id}/activate', array('as'=>'billing.fee_elements.activate', 'uses'=>'feeElementsController@activate'));
+		Route::get('billing/fee_elements/{id}/deactivate', array('as'=>'billing.fee_elements.deactivate', 'uses'=>'feeElementsController@deactivate'));
+		Route::resource('billing/fee_elements', 'feeElementsController');
+
+		//Fee Schedules
+		Route::get('billing/fee_schedules/{id}/activate', array('as'=>'billing.fee_schedules.activate', 'uses'=>'feeSchedulesController@activate'));
+		Route::get('billing/fee_schedules/{id}/deactivate', array('as'=>'billing.fee_schedules.deactivate', 'uses'=>'feeSchedulesController@deactivate'));
+		Route::get('billing/fee_schedules/{id}/bill_class', array('as'=>'billing.fee_schedules.bill_class', 'uses'=>'feeSchedulesController@billClass'));
+		Route::resource('billing/fee_schedules', 'feeSchedulesController');
+
+		//Invoices
+		Route::get('billing/invoices/{fee_schedule_code}/bill_class', array('as'=>'billing.invoices.bill_class', 'uses'=>'invoicesController@bill_class'));
+		Route::post('billing/invoices/class_invoices', array('as'=>'billing.invoices.class_invoices', 'uses'=>'invoicesController@class_invoices'));
+		Route::get('billing/invoices/{student_id}/{fee_schedule_code}/student_invoice', array('as'=>'billing.invoices.student_invoice', 'uses'=>'invoicesController@student_invoice'));
+		Route::resource('billing/invoices', 'invoicesController');
+
+		//Student Ledgers
+		Route::resource('billing/student_ledger', 'studentsLedgerController');
+
+
+
+
+
 		//Subjects
 		Route::resource('settings/subjects', 'subjectsController');
 
 		//Class
 		Route::resource('settings/classes', 'classesController');
+
+		//School
+		Route::resource('settings/school', 'schoolController');
 
 		//User
 		Route::resource('settings/users', 'usersController');
@@ -74,12 +101,14 @@ Route::group(['middleware' => 'login'], function(){
 	Route::get('logout', 		array('as' => 'logout', 	'uses' => 'loginController@logout'));
 });
 
+//Logout
+	Route::get('login', 		array('as' => 'login', 		'uses' => 'loginController@login'));
 
 // Login
-	Route::post('doLogin', 		array('as' => 'doLogin', 		'uses' => 'loginController@doLogin'));
+	Route::post('doLogin', 		array('as' => 'doLogin', 	'uses' => 'loginController@doLogin'));
 
-	// Error
-	Route::post('error', 		array('as' => 'error', 		'uses' => 'homeController@error'));
+// Error
+	Route::get('error', 		array('as' => 'error', 		'uses' => 'homeController@error'));
 
 
 

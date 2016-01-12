@@ -24,7 +24,7 @@ class rolesController extends Controller
         $data['title'] = 'Roles & Privileges';
         $data['permissions'] = Privilege::lists('permission', 'permission');
         $data['allPersmissions']  = Privilege::all();
-        $data['roles']  = Role::all();
+        $data['roles']  = Role::where('slug', '!=', 'super_administrator')->get();
         // foreach ($data['roles'] as $role) {
         //     echo $role->permissions;
         // }

@@ -16,16 +16,10 @@ class Login
      */
     public function handle($request, Closure $next){
 
-        if ($user = \Sentinel::check()){
-            return $next($request);
-        }
-        else{
-
-            $data['title'] = 'Login';
-            return view('login', $data);
-            // return \Redirect::to('logout');
+        if (!\Sentinel::check()){
+            return \Redirect::to('login');
         }
 
-        
+        return $next($request);
     }
 }

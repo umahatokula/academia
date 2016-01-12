@@ -40,6 +40,7 @@ class usersController extends Controller
     public function create()
     {
         $data['title'] = 'Manage Users';
+        $data['users_menu'] = 1;
         $data['staff'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
         $data['roles'] = Role::lists('name', 'id');
         $data['users'] = User::all();
@@ -130,6 +131,7 @@ class usersController extends Controller
     public function edit($id)
     {
         $data['user'] = User::find($id);
+        $data['users_menu'] = 1;
         $data['staff'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
         $data['roles'] = Role::lists('name', 'id');
 

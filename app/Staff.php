@@ -42,4 +42,8 @@ class Staff extends Model
     public function local(){
     	return $this->belongsTo('\App\Local');
     }
+
+    public function subjects(){
+        return $this->belongsToMany('\App\Subject', 'class_subject', 'staff_id', 'subject_id');
+    }
 }

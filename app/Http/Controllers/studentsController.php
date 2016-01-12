@@ -28,7 +28,8 @@ class studentsController extends Controller
      */
     public function index()
     {
-        $data['title'] = 'Everyone';
+        $data['title'] = 'Students';
+        $data['students_menu'] = 1;
         $data['students'] = Student::all();
         return view('admin.students.index', $data);
     }
@@ -41,6 +42,7 @@ class studentsController extends Controller
     public function create()
     {
         $data['title'] = 'Students';
+        $data['students_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
         $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
@@ -60,12 +62,24 @@ class studentsController extends Controller
      */
     public function store(createStudentRequest $request, Student $student)
     {
-        $student->create($request->all());
 
-        session()->flash('flash_message', 'Student successfully registered.');
-        session()->flash('flash_message_important', true);
+        if($request->picture->getClientOriginalExtension() == 'jpg'){
 
-        return redirect('admin/students');
+            $student = $student->create($request->except('picture'));
+
+            $imageName = $student->id.'.'.$request->picture->getClientOriginalExtension();
+
+            $request->picture->move(base_path().'/public/assets/images/students/', $imageName);
+
+            session()->flash('flash_message', 'Student successfully registered.');
+            session()->flash('flash_message_important', true);
+
+            return redirect('admin/students');
+        }
+
+        session()->flash('flash_message', 'Only .jpg images are allowed.');
+
+        return redirect()->back()->withInput();
     }
 
     /**
@@ -77,6 +91,7 @@ class studentsController extends Controller
     public function show($id)
     {
         $data['student'] = Student::find($id);
+        $data['students_menu'] = 1;
         $data['title'] = $data['student']->fname;
         return view('admin.students.show', $data);
     }
@@ -92,6 +107,7 @@ class studentsController extends Controller
         $data['student'] = Student::find($id);
 
         $data['title'] = 'Edit '.$data['student']->fname;
+        $data['students_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
         $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');
@@ -115,7 +131,7 @@ class studentsController extends Controller
     {
         $student = Student::find($id);
         $student->fill($request->all())->save();
-        return $this->show($id);
+        return \Redirect::to('admin/students');
     }
 
     /**
@@ -128,6 +144,6 @@ class studentsController extends Controller
     {
         $student = Student::find($id);
         $student->destroy();
-        return $this->index();
+        return \Redirect::to('admin/students');
     }
 }

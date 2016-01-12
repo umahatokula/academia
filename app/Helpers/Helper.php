@@ -3,6 +3,8 @@
 	namespace App\Helpers;
 
 	use \App\Role;
+	use \App\FeeSchedule;
+	use DB;
 
 	class Helper
 	{
@@ -48,5 +50,29 @@
 		public static function getUsersChurch(){
 			return \App\Person::find(\Session::get('user')->person_id)->church;
 		}
+
+
+		//et user's church by calling ${user}->church
+	    public static function getSubjectTeacher($class_id, $subject_id) {
+	        $teacher = \DB::table('class_subject')
+	        ->join('staff', 'staff.id', '=', 'class_subject.staff_id')
+	        ->where(['class_id' => $class_id, 'subject_id' => $subject_id ])->first();
+	        // dd($teacher);
+	        return $teacher->fname.' '.$teacher->lname;
+	    }
+
+	    public static function getFeeScheduleTotal($fee_schedule_code){
+	    	return FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->sum('amount');
+	    }
+
+	    public static function discountEngine($student_id){
+	    	$discount = 0;
+	    	return $discount;
+	    }
+
+
+	    public static function getStudentCurrentBalance($student_id){
+	    	return DB::table('student_ledgers')->where('student_id', $student_id)->sum('amount');
+	    }
 
 	}

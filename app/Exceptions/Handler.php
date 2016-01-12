@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use GrahamCampbell\Exceptions\ExceptionHandler as GrahamExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
+use declaration;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends GrahamExceptionHandler
 {
@@ -20,6 +22,7 @@ class Handler extends GrahamExceptionHandler
     protected $dontReport = [
         HttpException::class,
         ModelNotFoundException::class,
+        'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
     /**
@@ -52,9 +55,10 @@ class Handler extends GrahamExceptionHandler
             return redirect($request->fullurl())->with('csrf_error', 'Taking too Long, please refresh the page and try again');
         }
 
-        if ($e instanceof FatalErrorException) {
-            return \Redirect::to('/');
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return redirect($request->fullurl())->with('csrf_error', 'Taking too Long, please refresh the page and try again');
         }
+
 
         return parent::render($request, $e);
     }

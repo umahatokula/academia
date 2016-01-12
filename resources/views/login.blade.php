@@ -17,6 +17,8 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="{!! asset('plugins/iCheck/square/blue.css') !!}">
 
+    <link rel="stylesheet" href="{!! asset('assets/css/toastr.min.css') !!}">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,6 +27,7 @@
     <![endif]-->
   </head>
   <body class="hold-transition login-page">
+  {!! Toastr::render() !!}
     <div class="login-box">
       <div class="login-logo">
         <a href="#"><b>academia</b> <span style="font-size: 22px;">school sense</span></a>
@@ -32,14 +35,23 @@
       <div class="login-box-body" style="bg-color:#DDD;">
         <p class="login-box-msg">Sign in to start your session</p>
         {!! Form::open(array('route' => 'doLogin')) !!}
+          @if(\Session::has('flash_message'))
+            <div class="alert alert-error {!! \Session::has('flash_message_important') ? 'alert-important' : '' !!}">
+              @if(\Session::has('flash_message_important'))
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              @endif
+              
+              {!! session('flash_message') !!}
+            </div>
+          @endif
           <div class="form-group has-feedback">
             <!-- <input type="email" class="form-control" placeholder="Email"> -->
-            {!! Form::email('email', null, array('class' => 'form-control', 'id' => 'email')) !!}
+            {!! Form::email('email', null, array('class' => 'form-control', 'required', 'id' => 'email')) !!}
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
             <!-- <input type="password" class="form-control" placeholder="Password"> -->
-            {!! Form::password('password', array('class' => 'form-control', 'id' => 'password')) !!}
+            {!! Form::password('password', array('class' => 'form-control', 'required', 'id' => 'password')) !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row">
@@ -74,7 +86,9 @@
     <!-- Bootstrap 3.3.5 -->
     <script src="{!! asset('bootstrap/js/bootstrap.min.js') !!}"></script>
     <!-- iCheck -->
-    <script src="{!! asset('plugins/iCheck/icheck.min.js') !!}"></script>
+    <script src="{!! asset('plugins/iCheck/icheck.min.js') !!}"></script> 
+
+    <script src="{!! asset('assets/js/toastr.min.js') !!}"></script> 
     <script>
       $(function () {
         $('input').iCheck({
@@ -83,6 +97,9 @@
           increaseArea: '20%' // optional
         });
       });
+    </script>
+    <script type="text/javascript">
+      $('div.alert').not('.alert-important').delay(6000).slideUp(300);
     </script>
   </body>
 </html>

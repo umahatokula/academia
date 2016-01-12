@@ -27,7 +27,7 @@
                           </div>
                       @endif
               <!-- <form role="form" class="form-horizontal" role="form"> -->
-               {!! Form::open(array('route' => 'admin.parents.store', 'class' => 'form-horizontal', 'role' => 'form')) !!}
+               {!! Form::open(array('route' => 'admin.parents.store', 'class' => 'form-horizontal', 'role' => 'form', 'files' => true)) !!}
       
                 <div class="form-group {{ $errors->has('fname')? 'has-error' : ''}}">
                   <!-- <label class="col-sm-2 control-label" for="field-1">Input text field</label> -->
@@ -46,6 +46,18 @@
       
                   <div class="col-sm-10">
                     {!! Form::text('lname', null, array('class' => 'form-control', 'id' => 'lname')) !!}
+                  </div>
+                </div>
+
+                <div class="form-group-separator"></div>
+
+                <div class="form-group {{ $errors->has('address')? 'has-error' : ''}}">
+                  <!-- <label class="col-sm-2 control-label" for="field-1">Input text field</label> -->
+                  {!! Form::label('picture', 'Picture', array('class' => 'col-sm-2 control-label', 'for' => 'picture')) !!}
+      
+                  <div class="col-sm-10">
+                    <!-- <input type="text" class="form-control" id="field-1" placeholder="Placeholder"> -->
+                    {!! Form::file('picture', null, array('class' => 'form-control', 'id' => 'picture')) !!}
                   </div>
                 </div>
       

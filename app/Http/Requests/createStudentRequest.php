@@ -26,6 +26,7 @@ class createStudentRequest extends Request
         return [
             'fname'             => 'min:2|string|required',
             'lname'             => 'min:2|string|required',
+            'picture'           => 'required',
             'parent_id'         => 'integer|required',
             'class_id'          => 'integer|required',
             'address'           => 'required',

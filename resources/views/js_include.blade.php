@@ -8,4 +8,7 @@
    <!-- JavaScripts initializations and stuff -->
   <script src="{!! asset('assets/js/xenon-custom.js') !!}"></script> 
   <script src="{!! asset('assets/js/custom.js') !!}"></script>  
-  <script src="{!! asset('assets/js/myJs.js') !!}"></script> 
+  <script src="{!! asset('assets/js/myJs.js') !!}"></script>   
+  <script src="{!! asset('assets/js/toastr.min.js') !!}"></script>    
+  <script src="{!! asset('assets/js/printThis.js') !!}"></script>     
+  <script src="{!! asset('assets/js/jquery.printElement.js') !!}"></script> 

@@ -90,6 +90,8 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+            'greater_than' => 'Error on this entry',
+            'less_than' => 'Error on this entry',
         ],
     ],
 

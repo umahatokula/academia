@@ -25,6 +25,7 @@ class staffController extends Controller
     public function index()
     {
         $data['title'] = 'Staff Mgt';
+        $data['staff_menu'] = 1;
         $data['staffs'] = Staff::all();
         return view('admin.staff.index', $data);
     }
@@ -37,6 +38,7 @@ class staffController extends Controller
     public function create()
     {
         $data['title'] = 'Add Staff';
+        $data['staff_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
         $data['states'] = State::lists('name', 'id')->prepend('Please Select');
@@ -53,8 +55,21 @@ class staffController extends Controller
      */
     public function store(createStaffRequest $request)
     {
-        $staff = new Staff;
-        $staff->create($request->all());
+        $staff = Staff::create($request->except('picture'));
+
+        if($request->picture->getClientOriginalExtension() == 'jpg'){
+
+        $imageName = $staff->id.'.'.$request->picture->getClientOriginalExtension();
+
+        $request->picture->move(base_path().'/public/assets/images/staff/', $imageName);
+
+            session()->flash('flash_message', 'Staff successfully registered.');
+            session()->flash('flash_message_important', true);
+
+            return redirect('admin/staff');
+        }
+
+        session()->flash('flash_message', 'Only .jpg images are allowed.');
 
         return redirect('admin/staff');
     }
@@ -68,6 +83,7 @@ class staffController extends Controller
     public function show($id)
     {
         $data['staff'] = Staff::find($id);
+        $data['staff_menu'] = 1;
         return view('admin.staff.show', $data);
     }
 
@@ -80,7 +96,7 @@ class staffController extends Controller
     public function edit($id)
     {
         $data['staff'] = Staff::find($id);
-        // dd($data['staff']);
+        $data['staff_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['countries'] = Country::lists('name', 'id')->prepend('Please Select');
         $data['states'] = State::lists('name', 'id')->prepend('Please Select');

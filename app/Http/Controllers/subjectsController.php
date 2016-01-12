@@ -20,6 +20,7 @@ class subjectsController extends Controller
     public function index()
     {
         $data['title'] = 'Subjects';
+        $data['subjects_menu'] = 1;
         $data['subjects'] = Subject::all();
         return view('settings.subjects.index', $data);
     }
@@ -32,6 +33,7 @@ class subjectsController extends Controller
     public function create()
     {
         $data['title'] = 'Subjects';
+        $data['subjects_menu'] = 1;
         return view('settings.subjects.create', $data);
     }
 
@@ -60,6 +62,7 @@ class subjectsController extends Controller
     public function show($id)
     {
         $data['title'] = 'Subjects';
+        $data['subjects_menu'] = 1;
         $data['subject'] = Subject::find($id);
         return view('settings.subjects.show', $data);
     }
@@ -72,7 +75,8 @@ class subjectsController extends Controller
      */
     public function edit($id)
     {
-        $data['title'] = 'Subjects';
+        $data['title'] = 'Edit Subject';
+        $data['subjects_menu'] = 1;
         $data['subject'] = Subject::find($id);
         return view('settings.subjects.edit', $data);
     }

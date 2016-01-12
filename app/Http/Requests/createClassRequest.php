@@ -30,9 +30,9 @@ class createClassRequest extends Request
 
           foreach($this->request->get('staff') as $key => $val)
           {
-            $rules['staff.'.$key] = 'required|min:1';
+            $rules['staff.'.$key] = 'required|greater_than:0';
           }
-
+          // dd($rules);
           return $rules;
 
     }
@@ -44,7 +44,7 @@ class createClassRequest extends Request
       $messages = [];
       foreach($this->request->get('staff') as $key => $val)
       {
-        $messages['staff.'.$key.'.max'] = 'The field labeled "Subject '.$key.'" must be less than :max characters.';
+        $messages['staff.'.$key.'.max'] = 'The field labeled "Subject '.$key.'" must be selected.';
       }
       return $messages;
     }

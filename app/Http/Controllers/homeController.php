@@ -8,6 +8,10 @@ use App\Http\Controllers\Controller;
 
 use \App\Helpers\Helper;
 
+use \App\Staff;
+use \App\Student;
+use \App\studentClass;
+
 class homeController extends Controller
 {
     /**
@@ -18,6 +22,18 @@ class homeController extends Controller
     public function index()
     {
         $data['title'] = 'Home';
+        $data['home'] = 1;
+        $staff = Staff::find(\Session::get('user')->staff_id);
+        $classes = array('Please select a class');
+        foreach ($staff->classes as  $class) {
+            $classes[$class->id] = $class->name;
+        }
+        $data['classes'] = $classes;
+
+        if(session('user')->inRole('head_teacher')){
+            return view('dashboard_head_teacher', $data);
+        }
+
         return view('dashboard', $data);
     }
 

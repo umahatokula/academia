@@ -26,6 +26,7 @@ class createStaffRequest extends Request
         return [
             'fname'             => 'min:2|string|required',
             'lname'             => 'min:2|string|required',
+            'picture'           => 'required',
             'email'             => 'email|required|min:5',
             'staff_type_id'     => 'integer|required',
             'phone'             => 'min:11|required',

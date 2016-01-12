@@ -15,9 +15,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+// use App\Http\Controllers\Toastr;
 
 
 class loginController extends Controller {
+
+    public function login(){
+        return view('login');
+    }
 
 
     public function doLogin(Request $request) {
@@ -33,6 +38,9 @@ class loginController extends Controller {
 
         //if there is no match redirect to login page ith input
         if(is_null($user)){
+            // dd($user);
+            session()->flash('flash_message', 'Login failure.');
+            session()->flash('flash_message_important', true);
             return \Redirect::back()->withInput();
         }
 
