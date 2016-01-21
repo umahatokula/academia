@@ -55,7 +55,17 @@
 	                      </div>
 	                    </div>
 	                    <div class="panel-body">
-	                    <table class="table table-stripped table-hover table-bordered">
+	             		 <script type="text/javascript">
+				          jQuery(document).ready(function($)
+				          {
+				            $("#example-1").dataTable({
+				              aLengthMenu: [
+				                [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+				              ]
+				            });
+				          });
+				          </script>
+	                    <table class="table tale-condensed table-stripped table-hover table-bordered table-responsive" id="example-1">
 	                    	<thead>
 	                    		<tr>
 	                    			<td style="text-align:center">S/N</td>
@@ -87,7 +97,7 @@
 	                    			<td style="text-align:center">{!! $count !!}</td>
 	                    			<td><a href="{!! route('admin.students.show', array($invoice->student->id)) !!}">{!! $invoice->student->lname.' '.substr($invoice->student->mname,0 ,1).'. '.$invoice->student->fname !!}</a></td>
 	                    			<td style="text-align:right">{!! number_format($invoice->amount , 2) !!}</td>
-	                    			<td style="text-align:right">{!! number_format($invoice->discont , 2) !!}</td>
+	                    			<td style="text-align:right">{!! number_format($invoice->discount , 2) !!}</td>
 	                    			<td style="text-align:right">{!! number_format($invoice->balance , 2) !!}</td>
 	                    			<td style="text-align:right">{!! number_format($invoice->total , 2) !!}</td>
 		                            <td style="text-align:center">
@@ -105,7 +115,7 @@
 					                            
 					                      <ul class="dropdown-menu dropdown-blue" role="menu">
 					                        <li>
-					                          <a href="{!! route('billing.fee_schedules.edit', array($invoice->fee_schedule_code)) !!}" data-target="#responsiveModal" data-toggle="modal">Edit</a>
+					                          <a href="{!! route('billing.invoices.edit_student_invoice', array($invoice->student_id, $invoice->fee_schedule_code)) !!}" data-target="#responsiveModal" data-toggle="modal">Edit</a>
 					                        </li>
 					                        <li>
 					                          <a href="">sms</a>
@@ -129,7 +139,17 @@
 @stop
 @section('page_css')
   <!-- Imported styles on this page -->
+  <link rel="stylesheet" href="{!! asset('assets/js/datatables/dataTables.bootstrap.css') !!}">
 @stop
 @section('page_js')
   <!-- Imported styles on this page -->
+  <script src="{!! asset('assets/js/daterangepicker/daterangepicker.js') !!}"></script>
+  <script src="{!! asset('assets/js/datepicker/bootstrap-datepicker.js') !!}"></script>
+  <script src="{!! asset('assets/js/timepicker/bootstrap-timepicker.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/js/jquery.dataTables.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/rwd-table/js/rwd-table.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/dataTables.bootstrap.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/tabletools/dataTables.tableTools.min.js') !!}"></script>
+
 @stop

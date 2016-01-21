@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- <html lang="en"  ng-app="app"> -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -418,8 +419,9 @@ if(null !== \Session::get('message')){ ?>
   });
 
   // Print modal content only
-  function printModal(id){
-    $('#'+id).printElement();
+  function printModal() {
+    $('.modal-content').printThis();
+
   }
   
   </script>
@@ -429,20 +431,11 @@ if(null !== \Session::get('message')){ ?>
   <div class="modal fade" id="responsiveModal">
     <div class="modal-dialog">
       <div class="modal-content">
-        
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Modal Content is Responsive</h4>
-        </div>
-        
+                
         <div class="modal-body"><div class="te"></div>
           
         </div>
         
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-info">Save changes</button>
-        </div>
       </div>
     </div>
   </div>
@@ -451,20 +444,11 @@ if(null !== \Session::get('message')){ ?>
     <div class="modal fade" id="basicModal">
     <div class="modal-dialog">
       <div class="modal-content">
-        
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">@if(isset($basicModalTitle)){!! $basicModalTitle !!} @endif</h4>
-        </div>
-        
+                
         <div class="modal-body"><div class="te"></div>
           
         </div>
         
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-info">Save changes</button>
-        </div>
       </div>
     </div>
   </div>
@@ -474,19 +458,10 @@ if(null !== \Session::get('message')){ ?>
     <div class="modal-dialog" style="width: 60%;">
       <div class="modal-content">
         
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Custom Width Modal</h4>
-        </div>
-        
-        <div class="modal-body"><div class="te"></div>
+        <div class="modal-body" id="modal_body">
           
         </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-info">Save changes</button>
-        </div>
+
       </div>
     </div>
   </div>

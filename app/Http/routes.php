@@ -59,7 +59,19 @@ Route::group(['middleware' => 'login'], function(){
 		Route::get('billing/invoices/{fee_schedule_code}/bill_class', array('as'=>'billing.invoices.bill_class', 'uses'=>'invoicesController@bill_class'));
 		Route::post('billing/invoices/class_invoices', array('as'=>'billing.invoices.class_invoices', 'uses'=>'invoicesController@class_invoices'));
 		Route::get('billing/invoices/{student_id}/{fee_schedule_code}/student_invoice', array('as'=>'billing.invoices.student_invoice', 'uses'=>'invoicesController@student_invoice'));
+		Route::get('billing/invoices/{student_id}/{fee_schedule_code}/edit_student_invoice', array('as'=>'billing.invoices.edit_student_invoice', 'uses'=>'invoicesController@edit_student_invoice'));
+		Route::post('billing/invoices/update_student_invoice', array('as'=>'billing.invoices.update_student_invoice', 'uses'=>'invoicesController@update_student_invoice'));
+		Route::get('billing/invoices/{student_id}/{fee_schedule_code}/mail_invoice', array('as'=>'billing.invoices.mail_invoice', 'uses'=>'invoicesController@mail_invoice'));
 		Route::resource('billing/invoices', 'invoicesController');
+
+		//Discount Policies
+		Route::get('billing/edit_parent_policy', array('as'=>'billing.discount_policies.edit_parent_policy', 'uses'=>'discountPolicyController@edit_parent_policy'));
+		Route::get('billing/edit_staff_policy', array('as'=>'billing.discount_policies.edit_staff_policy', 'uses'=>'discountPolicyController@edit_staff_policy'));
+		Route::get('billing/edit_scholarship_policy', array('as'=>'billing.discount_policies.edit_scholarship_policy', 'uses'=>'discountPolicyController@edit_scholarship_policy'));
+		Route::PUT('billing/update_parent_policy', array('as'=>'billing.discount_policies.update_parent_policy', 'uses'=>'discountPolicyController@update_parent_policy'));
+		Route::PUT('billing/update_staff_policy', array('as'=>'billing.discount_policies.update_staff_policy', 'uses'=>'discountPolicyController@update_staff_policy'));
+		Route::PUT('billing/update_scholarship_policy', array('as'=>'billing.discount_policies.update_scholarship_policy', 'uses'=>'discountPolicyController@update_scholarship_policy'));
+		Route::resource('billing/discount_policies', 'discountPolicyController');
 
 		//Student Ledgers
 		Route::resource('billing/student_ledger', 'studentsLedgerController');

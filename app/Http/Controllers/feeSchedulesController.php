@@ -113,7 +113,7 @@ class feeSchedulesController extends Controller
             }
         }
 
-        return \Redirect::back();
+        return redirect('billing/fee_schedules');
     }
 
     /**

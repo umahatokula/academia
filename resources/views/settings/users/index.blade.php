@@ -66,6 +66,12 @@
                         $chcks.prop('checked', false).trigger('change');
                       }
                     });
+
+                    $("#example-2").dataTable({
+                      aLengthMenu: [
+                        [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+                      ]
+                    });
                   });
                   </script>
 
@@ -251,6 +257,7 @@
   <link rel="stylesheet" href="{!! asset('assets/js/select2/select2.css') !!}">
   <link rel="stylesheet" href="{!! asset('assets/js/select2/select2-bootstrap.css') !!}">
   <link rel="stylesheet" href="{!! asset('assets/js/multiselect/css/multi-select.css') !!}">
+  <link rel="stylesheet" href="{!! asset('assets/js/datatables/dataTables.bootstrap.css') !!}">
 @stop
 
 
@@ -266,6 +273,15 @@
   <script src="{!! asset('assets/js/typeahead.bundle.js') !!}"></script>
   <script src="{!! asset('assets/js/handlebars.min.js') !!}"></script>
   <script src="{!! asset('assets/js/multiselect/js/jquery.multi-select.js') !!}"></script>
+  <!-- Imported styles on this page -->
+  <script src="{!! asset('assets/js/daterangepicker/daterangepicker.js') !!}"></script>
+  <script src="{!! asset('assets/js/datepicker/bootstrap-datepicker.js') !!}"></script>
+  <script src="{!! asset('assets/js/timepicker/bootstrap-timepicker.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/js/jquery.dataTables.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/rwd-table/js/rwd-table.min.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/dataTables.bootstrap.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js') !!}"></script>
+  <script src="{!! asset('assets/js/datatables/tabletools/dataTables.tableTools.min.js') !!}"></script>
       <script type="text/javascript" language="javascript">
          $(document).ready(function() {
             $("#assign_roles").change(function(event){

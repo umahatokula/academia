@@ -109,7 +109,7 @@
               </li>
             </ul>
           </li>
-          <li class="{!! (isset($fee_schedules_menu) || isset($fee_elements_menu) || isset($invoice_menu))? 'opened active': ''; !!}">
+          <li class="{!! (isset($fee_schedules_menu) || isset($fee_elements_menu) || isset($invoice_menu) || isset($discount_policies_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-desktop"></i>
               <span class="title">Billing</span>
@@ -128,6 +128,11 @@
               <li class="{!! (isset($fee_elements_menu) && $fee_elements_menu == 1)? 'opened active': ''; !!}">
                 <a href="{!! url('billing/fee_elements') !!}">
                   <span class="title">Fee Elements</span>
+                </a>
+              </li>
+              <li class="{!! (isset($discount_policies_menu) && $discount_policies_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('billing/discount_policies') !!}">
+                  <span class="title">Discount Policies</span>
                 </a>
               </li>
             </ul>

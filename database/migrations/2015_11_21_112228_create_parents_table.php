@@ -26,6 +26,7 @@ class CreateParentsTable extends Migration
             $table->integer('local_id');
             $table->integer('religion_id');
             $table->integer('blood_group_id');
+            $table->integer('staff')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

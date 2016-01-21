@@ -20,6 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->double('discount', 15, 2);
             $table->double('balance', 15, 2);
             $table->double('total', 15, 2);
+            $table->json('exempted_fee_elements')->nullable();
             $table->integer('status_id')->default(4);
             $table->primary(array('student_id', 'fee_schedule_code'));
             $table->softDeletes();

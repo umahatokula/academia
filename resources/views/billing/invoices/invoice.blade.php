@@ -9,12 +9,12 @@
 							
 							<!-- Invoice Options Buttons -->
 							<div class="invoice-options hidden-print">
-								<a href="#" class="btn btn-block btn-gray btn-icon btn-icon-standalone btn-icon-standalone-right text-left">
+								<a href="{!! route('billing.invoices.mail_invoice', array($invoice->student_id, $invoice->fee_schedule_code)) !!}" class="btn btn-block btn-gray btn-icon btn-icon-standalone btn-icon-standalone-right text-left">
 									<i class="fa-envelope-o"></i>
 									<span>Send</span>
 								</a>
 								
-								<a href="#" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right btn-single text-left" onclick="printModal('customWidthModal')">
+								<a href="#" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right btn-single text-left" onclick="printModal()">
 									<i class="fa-print"></i>
 									<span>Print</span>
 								</a>
@@ -24,7 +24,7 @@
 							<div class="invoice-logo">
 							
 								<a href="#" class="logo">
-									<img src="{!! asset('assets/images/logo/1.png') !!}" class="img-responsive" width="150" />
+									<img src="{!! asset('assets/images/logo/1.png') !!}" class="img-responsive" width="120" />
 								</a>
 								
 								<ul class="list-unstyled">
@@ -80,24 +80,26 @@
 						
 						
 						<!-- Invoice Entries -->
-						<table class="table table-bordered table-stripped">
+						<table class="table table-bordered table-condensed table-stripped table-small-font">
 							<thead>
 								<tr class="no-borders">
-									<th class="text-center hidden-xs">#</th>
+									<th class="text-center">#</th>
 									<th width="60%" class="text-center">Description</th>
-									<th class="text-center hidden-xs">Amount</th>
+									<th class="text-center">Amount</th>
 								</tr>
 							</thead>
 							
 							<tbody>
 							<?php $count=1; $sub_total = 0; ?>
 							@foreach($fee_elements as $fee_element)
-								<tr>
-									<td class="text-center hidden-xs">{!! $count; !!}</td>
-									<td class="text-center hidden-xs">{!! $fee_element->feeElement->name; !!}</td>
-									<td class="text-right hidden-xs">{!! number_format($fee_element->amount, 2); !!}</td>
-								</tr>
-							<?php $count++; $sub_total += $fee_element->amount; ?>
+								@if(!in_array($fee_element->feeElement->id, $exempted_fee_elements))
+									<tr>
+										<td class="text-center">{!! $count; !!}</td>
+										<td class="text-center">{!! $fee_element->feeElement->name; !!}</td>
+										<td class="text-right">{!! number_format($fee_element->amount, 2); !!}</td>
+									</tr>
+									<?php $count++; $sub_total += $fee_element->amount; ?>
+								@endif
 							@endforeach
 							</tbody>
 						</table>
@@ -108,7 +110,7 @@
 							<div class="invoice-subtotals-totals">
 								<span>
 									Sub - Total amount: 
-									<strong>&#8358 {!! number_format($invoice->amount, 2) !!}</strong>
+									<strong>&#8358 {!! number_format($sub_total, 2) !!}</strong>
 								</span>
 								
 								<span>
@@ -120,7 +122,7 @@
 								
 								<span>
 									Grand Total: 
-									<strong>&#8358 {!! number_format($invoice->total, 2) !!}</strong>
+									<strong>&#8358 {!! number_format(($sub_total - $invoice->discount), 2) !!}</strong>
 								</span>
 							</div>
 							

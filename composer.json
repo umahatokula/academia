@@ -18,7 +18,10 @@
         "elasticquent/elasticquent": "dev-master",
         "graham-campbell/exceptions": "^5.0",
         "oriceon/toastr-5-laravel": "dev-master",
-        "nilsenj/toastr-5.1-laravel": "dev-master"
+        "nilsenj/toastr-5.1-laravel": "dev-master",
+        "snowfire/beautymail": "dev-master",
+        "guzzlehttp/guzzle": "~4.0",
+        "tijsverkoyen/css-to-inline-styles": "1.2.*"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
@@ -32,6 +35,9 @@
         ],
         "psr-4": {
             "App\\": "app/"
+        },
+        "psr-0": {
+            "TeenQuotes": "app/lib"
         }
     },
     "autoload-dev": {

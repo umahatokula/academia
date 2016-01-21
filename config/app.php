@@ -126,7 +126,7 @@ return [
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Mail\MailServiceProvider::class,
+        // Illuminate\Mail\MailServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
@@ -153,6 +153,7 @@ return [
         'App\Providers\AppServiceProvider',
         'Kamaln7\Toastr\ToastrServiceProvider',
         'nilsenj\Toastr\ToastrServiceProvider',
+        'TeenQuotes\Mail\MailServiceProvider',
 
     ],
 

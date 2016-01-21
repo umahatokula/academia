@@ -36,7 +36,8 @@ class createParentRequest extends Request
             'state_id'          => 'integer|required',
             'local_id'          => 'integer|required',
             'religion_id'       => 'integer|required',
-            'blood_group_id'    => 'integer|required'
+            'blood_group_id'    => 'integer|required',
+            'staff'             => 'integer|required'
         ];
     }
 }
