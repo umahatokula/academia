@@ -14,8 +14,6 @@
   <script src="{!! asset('assets/js/jquery.printElement.js') !!}"></script> 
 
   <!-- angularJs -->
-  <script src="{!! asset('assets/js/angular.min.js') !!}"></script> 
-  <script src="http://code.angularjs.org/1.2.3/angular.js"></script>
-  <script src="http://code.angularjs.org/1.2.3/angular-route.js"></script>
-  <script src="./app.js"></script>
+  <script src="{!! asset('assets/js/angular.js') !!}"></script>
+  <script src="{!! asset('assets/js/app.js') !!}"></script>
   

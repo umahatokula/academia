@@ -85,7 +85,7 @@ class feeSchedulesController extends Controller
             session()->flash('flash_message', 'Select Term');
             return \Redirect::back()->withInput();
         }
-        //ensure at least on element was selected
+        //ensure at least one element was selected
         if (null == $request->element_id || null == $request->amount) {
             session()->flash('flash_message', 'Select fee elements');
             return \Redirect::back()->withInput();

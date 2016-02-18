@@ -168,11 +168,21 @@ class invoicesController extends Controller
         // dd($request);
         $current_elements = FeeSchedule::where('fee_schedule_code', $request->fee_schedule_code)->lists('fee_element_id')->toArray();
         $discount = Invoice::select('discount')->where(['student_id'=>$request->student_id, 'fee_schedule_code'=>$request->fee_schedule_code])->first()->discount;
-        $exempted_fee_elements = array_values(array_diff($current_elements, $request->element_id));
-        $accepted_fee_elements = $request->element_id;
-        $amount = 0;
-        foreach ($accepted_fee_elements as $accepted_fee_element) {
-            $amount += FeeSchedule::select('amount')->where(['fee_schedule_code'=>$request->fee_schedule_code, 'fee_element_id'=>$accepted_fee_element])->first()->amount;
+        
+        if(null !== $request->element_id){
+            $exempted_fee_elements = array_values(array_diff($current_elements, $request->element_id)); 
+        }else{
+            $exempted_fee_elements=$current_elements;
+        }
+
+        if(null !== $request->element_id){
+            $accepted_fee_elements = $request->element_id;
+            $amount = 0;
+            foreach ($accepted_fee_elements as $accepted_fee_element) {
+                $amount += FeeSchedule::select('amount')->where(['fee_schedule_code'=>$request->fee_schedule_code, 'fee_element_id'=>$accepted_fee_element])->first()->amount;
+            }
+        }else{
+            $amount = 0;
         }
         // dd($amount);
 
@@ -244,6 +254,7 @@ class invoicesController extends Controller
 
         //get all studenta ids who are eligible for the parent discount
         $parent_discount_eligible = Helper::getParentDiscountEligibles();
+        // dd($parent_discount_eligible);
 
         foreach ($students as $student) {
 

@@ -47,9 +47,17 @@ class loginController extends Controller {
         //attempt to login
         $login = isset($request->remember_me) && $request->remember_me == 1 ? $user = \Sentinel::login($user) : $user = \Sentinel::login($user);
 
-        // dd($login);
+        // store user info in session
         $user = \Sentinel::getUser();
         \Session::put('user', $user);
+
+        //store session and term info in session
+        $term_info = DB::table('current_term')->orderBy('created_at', 'desc')->first();
+
+        if (null !== $term_info) {
+            \Session::put(['current_session' => $term_info->session, 'current_term' => $term_info->term]);
+        }
+        
 
         return \Redirect::intended();
     }

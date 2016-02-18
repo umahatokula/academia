@@ -27,5 +27,11 @@ class StudentClass extends Model
         return $this->belongsToMany('\App\Subject', 'class_subject', 'class_id', 'subject_id');
     }
 
+    public static function getHeadTeacher($class_id){
+        $return = \DB::table('classes')->where(['classes.id'=>$class_id])->join('staff', 'staff.id', '=', 'classes.staff_id')->first();
+        return $return;
+
+    }
+
     
 }

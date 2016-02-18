@@ -466,6 +466,19 @@ if(null !== \Session::get('message')){ ?>
     </div>
   </div>
 
+    <!-- Modal 2 (Custom Width)-->
+  <div class="modal fade custom-width" id="reportSheetModal">
+    <div class="modal-dialog" style="width: 80%;">
+      <div class="modal-content">
+        
+        <div class="modal-body" id="modal_body">
+          
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 <!-- <div class="page-loading-overlay">
   <div class="loader-2"></div>
 </div> -->

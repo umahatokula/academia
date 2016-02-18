@@ -51,6 +51,7 @@ class classesController extends Controller
     public function store(createClassRequest $request)
     {
         // dd($request->all());
+        dd($request->subject_id);
         $class = new StudentClass;
         $class->name = $request->name;
         $class->staff_id = $request->staff_id;
@@ -66,6 +67,8 @@ class classesController extends Controller
             }
             
         }
+
+        DB::statement();
 
         session()->flash('flash_message', 'Class successfully created.');
         session()->flash('flash_message_important', true);

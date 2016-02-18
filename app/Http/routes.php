@@ -29,12 +29,23 @@ Route::group(['middleware' => 'login'], function(){
 
 	//Ressults
 	Route::post('academics/results/fetchSheet', array('as'=> 'fetchSheet', 'uses' => 'resultsController@fetchSheet'));
+	Route::get('academics/results/{class_id}/compute', array('as'=> 'results.compute', 'uses' => 'resultsController@compute_result'));
+	Route::get('academics/results/{class_id}/result_sheet', array('as'=> 'results.result_sheet', 'uses' => 'resultsController@show_result_sheet'));
+	Route::get('academics/results/{class_id}/student_subject_exemption', array('as'=> 'results.student_subject_exemption', 'uses' => 'resultsController@student_subject_exemption'));
+	Route::post('academics/results/store_student_subject_exemption', array('as'=> 'results.store_student_subject_exemption', 'uses' => 'resultsController@store_student_subject_exemption'));
+	Route::get('academics/results/{student_id}/{class_id}/report_sheet', array('as'=> 'results.report_sheet', 'uses' => 'resultsController@report_sheet'));
 	Route::resource('academics/results', 'resultsController');
 
+
+	//parents
 	Route::resource('admin/parents', 'parentsController');
 
+
+	//students
 	Route::resource('admin/students', 'studentsController');
 
+
+	//staff
 	Route::resource('admin/staff', 'staffController');
 
 	//==========================SETTINGS==========================|
@@ -87,6 +98,7 @@ Route::group(['middleware' => 'login'], function(){
 		Route::resource('settings/classes', 'classesController');
 
 		//School
+		Route::post('settings/school/new_term', array('as'=>'settings.school.new_term', 'uses'=>'schoolController@new_term'));
 		Route::resource('settings/school', 'schoolController');
 
 		//User

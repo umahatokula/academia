@@ -4,9 +4,9 @@
         
           <!-- Add your copyright text here -->
           <div class="footer-text">
-            &copy; 2015 
+            &copy; {!! date('Y') !!} 
             <strong>Academia</strong> 
-            by <a href="http://laborator.co" target="_blank">OvalSoft Solutions</a>
+            by <a href="http://laborator.co" target="_blank">OvalSoft Technologies</a>
           </div>
           
           
