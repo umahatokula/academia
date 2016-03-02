@@ -27,11 +27,16 @@ class resultsController extends Controller
         $data['title'] = 'Result Sheet';
         $data['results_menu'] = 1;
         $staff = Staff::find(\Session::get('user')->staff_id);
-        $classes = array('Please select a class');
-        foreach ($staff->classes as  $class) {
-            $classes[$class->id] = $class->name;
+        if(\Sentinel::getUser()->inRole('principal') OR \Sentinel::getUser()->inRole('coder')) {
+            $data['classes'] = studentClass::lists('name', 'id')->prepend('Select a class');
+        }else{
+            $classes = array('Please select a class');
+            foreach ($staff->classes as  $class) {
+                $classes[$class->id] = $class->name;
+            }
+            $data['classes'] = $classes;
+
         }
-        $data['classes'] = $classes;
         return view('academics.results.index', $data);
     }
 
@@ -96,24 +101,35 @@ class resultsController extends Controller
             // dd($subject_id);
             foreach ($subjects as $subject_id => $scores) {
                     // dd($scores);
-                $subject_total = $scores[4] + $scores[5] + $scores[6] + $scores[7];
+                $scores = array_slice($scores, -4, 4);
+                    // dd($scores);
+                $subject_total = array_sum($scores);
 
                 //get student's grade for this subject
                 $grade = Helper::get_grade($subject_total);
+                try{
+                    \DB::table($table)
+                    ->where([
+                        'class_id'      => $request->class_id,
+                        'student_id'    => $student_id,
+                        'subject_id'    => $subject_id])
+                    ->update([
+                        'ca1'           => $scores[0],
+                        'ca2'           => $scores[1],
+                        'ca3'           => $scores[2],
+                        'exam'          => $scores[3],
+                        'subject_total' => $subject_total,
+                        'grade'         => $grade
+                        ]);
 
-                \DB::table($table)
-                ->where([
-                    'class_id'      => $request->class_id,
-                    'student_id'    => $student_id,
-                    'subject_id'    => $subject_id])
-                ->update([
-                    'ca1'           => $scores[4],
-                    'ca2'           => $scores[5],
-                    'ca3'           => $scores[6],
-                    'exam'          => $scores[7],
-                    'subject_total' => $subject_total,
-                    'grade'         => $grade
-                    ]);
+
+                }catch (\Illuminate\Database\QueryException $e){
+                    $errorCode = $e->errorInfo[1];
+                    if($errorCode == 1050){
+                        session()->flash('flash_message', 'There was a problem updating records.');
+                        return \Redirect::back()->withInput();
+                    }
+                }
 
             }
         }
@@ -154,7 +170,9 @@ class resultsController extends Controller
         //
     }
 
-    public function fetchSheet(Request $request){
+    public function fetchSheet( Request $request){
+        // dd($request->class);
+        $class_id = $request->class;
 
         $data['title'] = 'Scoresheet';
         $data['results_menu'] = 1;
@@ -169,15 +187,15 @@ class resultsController extends Controller
 
 
         // dd($request);
-        if($request->class == 0){
-            session()->flash('flash_message', 'Welcome');
+        if($class_id == 0){
+            session()->flash('flash_message', 'Select a class');
             // session()->flash('flash_message_important', true);
             return \Redirect::to('academics/results');
         }
 
-        $class = studentClass::where(['id' => $request->class])->first();
-        $subjects = \DB::table('class_subject')->where(['class_id'=> $request->class])->get();
-        $students = Student::where(['class_id' => $request->class])->get();
+        $class = studentClass::where(['id' => $class_id])->first();
+        $subjects = \DB::table('class_subject')->where(['class_id'=> $class_id])->get();
+        $students = Student::where(['class_id' => $class_id])->get();
 
 
         //add students to class results table with initial values of zero
@@ -188,7 +206,7 @@ class resultsController extends Controller
 
                 $positions_table = 'class_positions_'.\Session::get('current_session').'_'.\Session::get('current_term');
 
-                $subject_exemption_table = 'subject_exemption_'.\Session::get('current_session').'_'.\Session::get('current_term');
+                $subject_exemption_table = 'subject_ex_'.\Session::get('current_session').'_'.\Session::get('current_term');
 
                 //initialize class results table
                 try{
@@ -411,7 +429,7 @@ class resultsController extends Controller
         $students_in_class = $request->to_exempt;
 
         //get table name based on current session and term
-        $subject_exemption_table = 'subject_exemption_'.\Session::get('current_session').'_'.\Session::get('current_term');
+        $subject_exemption_table = 'subject_ex_'.\Session::get('current_session').'_'.\Session::get('current_term');
 
         //get all subjects assigned to this class
         $class_subjects = studentClass::find($class_id)->subjects;
@@ -431,7 +449,7 @@ class resultsController extends Controller
             //get subjects that SHOULD NOT be exempted
             foreach ($subjects as $key => $subject) {
 
-                    $not_to_exempt[] = $subject;
+                $not_to_exempt[] = $subject;
 
             }
 
@@ -442,11 +460,11 @@ class resultsController extends Controller
             foreach ($exempt as $subject_id) {
 
                 try{
-                \DB::table($subject_exemption_table)
-                ->where(['class_id' => $class_id, 'student_id' => $student_id, 'subject_id' => $subject_id])
-                ->update([
-                    'state'         => 0,
-                    ]);
+                    \DB::table($subject_exemption_table)
+                    ->where(['class_id' => $class_id, 'student_id' => $student_id, 'subject_id' => $subject_id])
+                    ->update([
+                        'state'         => 0,
+                        ]);
                 }catch (\Illuminate\Database\QueryException $e){
                     $errorCode = $e->errorInfo[1];
                 }
@@ -455,11 +473,11 @@ class resultsController extends Controller
             //update student record with subjects that SHOULD NOT be exempted
             foreach ($not_to_exempt as $subject_id) {
                 try{
-                \DB::table($subject_exemption_table)
-                ->where(['class_id' => $class_id, 'student_id' => $student_id, 'subject_id' => $subject_id])
-                ->update([
-                    'state'         => 1,
-                    ]);
+                    \DB::table($subject_exemption_table)
+                    ->where(['class_id' => $class_id, 'student_id' => $student_id, 'subject_id' => $subject_id])
+                    ->update([
+                        'state'         => 1,
+                        ]);
                 }catch (\Illuminate\Database\QueryException $e){
                     $errorCode = $e->errorInfo[1];
                 }
@@ -497,5 +515,26 @@ class resultsController extends Controller
     }
 
 
+    public function promote($class_id) {
+
+        $table = 'class_positions_'.\Session::get('current_session').'_'.\Session::get('current_term');
+
+        $promotion_class_id = studentClass::where('id', $class_id)->first()->promotion_class_id;
+
+        $pass_avg = 50.00;
+
+        $students = Student::where('class_id', $class_id)->get();
+
+        foreach ($students as $student) {
+
+            $student_avg = \DB::table($table)->where(['student_id' => $student->id, 'class_id' => $class_id])->first()->average;
+
+            if($student_avg >= $pass_avg){
+                $std = new Student;
+                $std->class_id = $promotion_class_id;
+                $std->save();
+            }
+        }
+    }
 
 }

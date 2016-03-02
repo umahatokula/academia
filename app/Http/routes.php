@@ -27,6 +27,14 @@ Route::group(['middleware' => 'login'], function(){
 	Route::resource('/', 'homeController');
 
 
+	//==========================SETTINGS==========================|
+	//============================================================|
+	//==========================HEADTEACHER ROUTES=================|
+	//============================================================|
+
+	Route::group(['middleware' => 'head_teacher'], function(){
+
+
 	//Ressults
 	Route::post('academics/results/fetchSheet', array('as'=> 'fetchSheet', 'uses' => 'resultsController@fetchSheet'));
 	Route::get('academics/results/{class_id}/compute', array('as'=> 'results.compute', 'uses' => 'resultsController@compute_result'));
@@ -34,8 +42,19 @@ Route::group(['middleware' => 'login'], function(){
 	Route::get('academics/results/{class_id}/student_subject_exemption', array('as'=> 'results.student_subject_exemption', 'uses' => 'resultsController@student_subject_exemption'));
 	Route::post('academics/results/store_student_subject_exemption', array('as'=> 'results.store_student_subject_exemption', 'uses' => 'resultsController@store_student_subject_exemption'));
 	Route::get('academics/results/{student_id}/{class_id}/report_sheet', array('as'=> 'results.report_sheet', 'uses' => 'resultsController@report_sheet'));
+	Route::get('academics/results/{class_id}/promote', array('as'=> 'results.promote', 'uses' => 'resultsController@promote'));
 	Route::resource('academics/results', 'resultsController');
 
+
+	});
+
+
+	//==========================SETTINGS==========================|
+	//============================================================|
+	//==========================ADMIN DEPT ROUTES=================|
+	//============================================================|
+
+	Route::group(['middleware' => ['admin_dept_officer']], function(){
 
 	//parents
 	Route::resource('admin/parents', 'parentsController');
@@ -48,12 +67,16 @@ Route::group(['middleware' => 'login'], function(){
 	//staff
 	Route::resource('admin/staff', 'staffController');
 
+	});
+
+
+
 	//==========================SETTINGS==========================|
 	//============================================================|
-	//==========================HEADMASTER ROUTES=================|
+	//==========================BILLING ROUTES=================|
 	//============================================================|
 
-	Route::group(['middleware' => ['super_administrator']], function(){
+	Route::group(['middleware' => ['billing_officer']], function(){
 		
 		//Fee Elements
 		Route::get('billing/fee_elements/{id}/activate', array('as'=>'billing.fee_elements.activate', 'uses'=>'feeElementsController@activate'));
@@ -87,7 +110,36 @@ Route::group(['middleware' => 'login'], function(){
 		//Student Ledgers
 		Route::resource('billing/student_ledger', 'studentsLedgerController');
 
+	});
 
+
+
+
+		//==========================SETTINGS==========================|
+	//============================================================|
+	//==========================ACCOUNTS ROUTES=================|
+	//============================================================|
+
+	Route::group(['middleware' => ['accounts_officer']], function(){
+
+
+		Route::post('payments/pay_invoice', array('as'=>'payments.pay_invoice', 'uses'=>'paymentsController@pay_invoice'));
+		Route::resource('payments', 'paymentsController');
+
+		Route::post('accounts/reports/search', array('as'=>'accounts.reports.search', 'uses'=>'accountsController@reports_search'));
+		Route::resource('accounts/reports', 'accountsController');
+
+	});
+
+
+
+	//==========================SETTINGS==========================|
+	//============================================================|
+	//==========================PRINCIPAL ROUTES=================|
+	//============================================================|		
+
+
+	Route::group(['middleware' => 'principal'], function(){	
 
 
 
@@ -99,21 +151,29 @@ Route::group(['middleware' => 'login'], function(){
 
 		//School
 		Route::post('settings/school/new_term', array('as'=>'settings.school.new_term', 'uses'=>'schoolController@new_term'));
+		Route::post('settings/school/promotion_avg', array('as'=>'settings.school.promotion_avg', 'uses'=>'schoolController@promotion_avg'));
+		Route::post('settings/school/discount_policies', array('as'=>'settings.school.discount_policies', 'uses'=>'schoolController@discount_policies'));
 		Route::resource('settings/school', 'schoolController');
 
 		//User
 		Route::resource('settings/users', 'usersController');
+
+		//RRoles & Privileges
+		Route::post('settings/ajax/rolePermissions', array('as' => 'rolePermissions', 'uses' => 'loginController@rolePermissions'));
+		Route::resource('settings/privileges', 'privilegesController');
+		Route::resource('settings/roles', 'rolesController');
 	});
 
 
 
-	//==========================SETTINGS==========================|
+		//==========================SETTINGS==========================|
 	//============================================================|
-	//==========================SUPERADMIN ROUTES=================|
+	//==========================PRINCIPAL ROUTES=================|
 	//============================================================|		
 
 
-	Route::group(['middleware' => 'super_administrator'], function(){	
+	Route::group(['middleware' => 'coder'], function(){	
+
 		//RRoles & Privileges
 		Route::post('settings/ajax/rolePermissions', array('as' => 'rolePermissions', 'uses' => 'loginController@rolePermissions'));
 		Route::resource('settings/privileges', 'privilegesController');

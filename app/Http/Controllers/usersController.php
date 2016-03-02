@@ -42,7 +42,7 @@ class usersController extends Controller
         $data['title'] = 'Manage Users';
         $data['users_menu'] = 1;
         $data['staff'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
-        $data['roles'] = Role::lists('name', 'id');
+        $data['roles'] = Role::noncoder()->lists('name', 'id');
         $data['users'] = User::all();
         $data['permissions'] = [];
         return view('settings.users.index', $data);
@@ -133,7 +133,7 @@ class usersController extends Controller
         $data['user'] = User::find($id);
         $data['users_menu'] = 1;
         $data['staff'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->lists('full_name', 'id');
-        $data['roles'] = Role::lists('name', 'id');
+        $data['roles'] = Role::noncoder()->lists('name', 'id');
 
         //get the id(s) of the roles of this user in an array
         $roles = array();
@@ -153,8 +153,10 @@ class usersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
+
+        // dd($request);
+
         //get user u ant to update
         $user = \Sentinel::findById($id);
          //get the persons details
@@ -177,7 +179,7 @@ class usersController extends Controller
                     'email'         => $staff->email,
                     'password'      => $request->password,
                     'permissions'   => $array_of_permissions,
-                    'staff_id'     => $staff->id,
+                    'staff_id'      => $staff->id,
                     'first_name'    => $staff->fname,
                     'last_name'     => $staff->lname,
                 ];

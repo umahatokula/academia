@@ -30,7 +30,7 @@ class Student extends Model
     	return $this->belongsTo('\App\Gender', 'gender_id', 'id');
     }
 
-      public function country(){
+    public function country(){
     	return $this->belongsTo('\App\Country');
     }
 
@@ -44,7 +44,7 @@ class Student extends Model
     	return $this->belongsTo('\App\Local');
     }
 
-     public function religion(){
+    public function religion(){
         return $this->belongsTo('\App\Religion');
     }
 }

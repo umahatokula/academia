@@ -51,6 +51,14 @@ class loginController extends Controller {
         $user = \Sentinel::getUser();
         \Session::put('user', $user);
 
+        //store user's role in session
+        $roles = [];
+        foreach ($user->roles as $role) {
+            $roles[] = $role;
+        }
+
+        \Session::put('roles', $roles);
+
         //store session and term info in session
         $term_info = DB::table('current_term')->orderBy('created_at', 'desc')->first();
 

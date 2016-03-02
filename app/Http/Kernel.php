@@ -27,9 +27,12 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'login' => 'App\Http\Middleware\Login',
-        'super_administrator' => 'App\Http\Middleware\Admin',
-        'head_master' => 'App\Http\Middleware\Headmaster',
-        'pastors' => 'App\Http\Middleware\Pastors',
+        'coder' => 'App\Http\Middleware\Admin',
+        'principal' => 'App\Http\Middleware\Headmaster',
+        'head_teacher' => 'App\Http\Middleware\HeadTeacher',
+        'billing_officer' => 'App\Http\Middleware\BillingOfficer',
+        'admin_dept_officer' => 'App\Http\Middleware\AdminDeptOfficer',
+        'accounts_officer' => 'App\Http\Middleware\AccountOfficer',
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,

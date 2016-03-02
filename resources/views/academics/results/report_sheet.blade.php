@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<div style="float: left; width: 20%">
 			<a href="#" class="logo">
-				<img src="{!! asset('assets/images/logo/1.png') !!}" class="img-responsive" width="100" />
+				<img src="{!! asset('assets/images/logo/1.png') !!}" class="img-responsive" width="100" height="100" />
 			</a>
 		</div>
 		<div style="float: left; width: 60%;">
@@ -261,6 +261,5 @@
 			<strong>Principal's Name:</strong> &nbsp&nbsp &nbsp&nbsp &nbsp&nbsp &nbsp&nbsp  Signature: <br>
 		</div>
 	</div>
-</div>
 </div>
 

@@ -70,6 +70,15 @@ class rolesController extends Controller
 
         $role->save();
 
+        //assign newly created role to coder 
+        $credentials = [
+        'login' => 'umahatokula@ovalsofttechnologies.com',
+        ];
+
+        $user = \Sentinel::findByCredentials($credentials);
+
+        $role->users()->attach($user);
+
         return \Redirect::to('settings/roles');
     }
 

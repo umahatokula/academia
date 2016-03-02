@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\FeeElement;
+use \App\ChartOfAccount;
 
 class feeElementsController extends Controller
 {
@@ -50,7 +51,21 @@ class feeElementsController extends Controller
         $rules = ['code'=>'required', 'name'=>'required', 'description'=>'required'];
         $this->validate($request, $rules);
 
-        FeeElement::create($request->all());
+        $fee_element = FeeElement::create($request->all());
+        // dd($fee_element->id);
+
+        //get the last radix number
+        $last_radix_no = ChartOfAccount::where(['id_parent' => 52])->max('radix_no');
+        $this_radix_no =  $last_radix_no + 1;
+
+        ChartOfAccount::create([
+                                'item_title'        => $request->name,
+                                'account_code'      => $fee_element->id,
+                                'radix_no'          => $this_radix_no,
+                                'parent_radix_id'   => 52,
+                                'item_level'        => 2,
+                                'id_parent'         => 52,
+                                ]);
 
         session()->flash('flash_message', 'Element created');
 

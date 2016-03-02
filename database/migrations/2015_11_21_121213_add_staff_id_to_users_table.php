@@ -13,7 +13,7 @@ class AddStaffIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('staff_id');
+            $table->integer('staff_id')->nullable();
         });
     }
 

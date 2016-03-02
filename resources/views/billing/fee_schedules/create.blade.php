@@ -33,8 +33,8 @@
                     <tr>
                       <td>&nbsp</td>
                       <td>{!! Form::select('class_id',$classes, null, array('class' => 'form-control', 'id' => 'class_id', 'required')) !!}</td>
-                      <td>{!! Form::select('session', $sessions, null, array('class' => 'form-control', 'id' => 'session', 'required')) !!}</td>
-                      <td>{!! Form::select('term_id', $terms, null, array('class' => 'form-control', 'id' => 'term_id', 'required')) !!}</td>
+                      <td>{!! Form::select('session', $sessions, session()->get('current_session'), array('class' => 'form-control', 'id' => 'session', 'required')) !!}</td>
+                      <td>{!! Form::select('term_id', $terms, session()->get('current_term'), array('class' => 'form-control', 'id' => 'term_id', 'required')) !!}</td>
                     </tr>                
                   @foreach($fee_elements as $fee_element)
                     <tr>

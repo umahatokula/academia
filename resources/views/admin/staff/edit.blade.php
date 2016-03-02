@@ -127,7 +127,7 @@
                   {!! Form::label('address', ' ', array('class' => 'col-sm-2 control-label', 'for' => 'address')) !!}
       
                   <div class="col-sm-10">
-                  {!! Form::submit('update', array('class' => 'btn btn-blue')) !!}
+                  {!! Form::submit('save', array('class' => 'btn btn-blue')) !!}
                   </div>
                 </div>
 

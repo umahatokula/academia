@@ -18,7 +18,7 @@ class Headmaster
         //get currrnt user
         $user = \Sentinel::getUser();
 
-        if($user->inRole('head_master')){
+        if($user->inRole('principal')){
             return $next($request);
         } else{
             session()->flash('flash_message', 'You do not have the permission to access this page');

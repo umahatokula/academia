@@ -17,6 +17,7 @@ class CreateClassesTable extends Migration
             $table->string('name');
             $table->integer('staff_id');
             $table->integer('max_students');
+            $table->integer('promotion_class_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

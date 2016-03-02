@@ -68,7 +68,11 @@
                   <td>{!! $student->fname.' '.$student->mname.' '.$student->lname !!}</td>
                   <td>{!! $student->gender->gender !!}</td>
                   <td>{!! $student->studentClass->name !!}</td>
-                  <td>{!! $student->studentParent->fname.' '.$student->studentParent->lname  !!}</td>
+                  <td>
+                    @if(!is_null($student->studentParent)) 
+                    {!! $student->studentParent->fname.' '.$student->studentParent->lname  !!}
+                    @endif 
+                  </td>
                   <td style="text-align:center">
                     <div class="btn-group right-dropdown">
                             <button type="button" class="btn btn-blue btn-sm">List of Actions</button>

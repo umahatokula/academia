@@ -92,10 +92,10 @@
 				<tbody>
 					<?php $count=1; $sub_total = 0; ?>
 					@foreach($fee_elements as $fee_element)
-					@if(!in_array($fee_element->feeElement->id, $exempted_fee_elements))
+					@if(!in_array($fee_element->fee_element_id, $exempted_fee_elements))
 					<tr>
 						<td class="text-center">{!! $count; !!}</td>
-						<td class="text-center">{!! $fee_element->feeElement->name; !!}</td>
+						<td class="text-center">{!! $fee_element->fee_element_name; !!}</td>
 						<td class="text-right">{!! number_format($fee_element->amount, 2); !!}</td>
 					</tr>
 					<?php $count++; $sub_total += $fee_element->amount; ?>

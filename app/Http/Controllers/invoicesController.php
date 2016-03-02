@@ -16,6 +16,7 @@ use App\Invoice;
 use App\FeeElement;
 use App\Helpers\Helper;
 use App\DiscountPolicy;
+use DB;
 
 class invoicesController extends Controller
 {
@@ -79,10 +80,10 @@ class invoicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
-    {    
+        public function show(Request $request)
+        {    
         //
-    }
+        }
 
     /**
      * Display the specified resource.
@@ -92,17 +93,35 @@ class invoicesController extends Controller
      */
     public function student_invoice($student_id, $fee_schedule_code){
 
-        $data['fee_elements'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->get();
-        $data['fee_schedule'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->first();
-        $data['invoice'] = Invoice::where(['student_id' => $student_id, 'fee_schedule_code' => $fee_schedule_code])->first();
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $data['fee_elements'] = DB::table($table)
+        ->select($table.'.*',
+            'classes.*',
+            'terms.*',
+            'fee_elements.*',
+            'status.*',
+            'fee_elements.name AS fee_element_name',
+            'fee_elements.id AS fee_element_id')
+        ->join('classes', 'classes.id', '=', $table.'.class_id')
+        ->join('terms', 'terms.id', '=', $table.'.term_id')
+        ->join('fee_elements', 'fee_elements.id', '=', $table.'.fee_element_id')
+        ->join('status', 'status.id', '=', $table.'.status_id')
+        ->where('fee_schedule_code', $fee_schedule_code)
+        ->get();
+
+        $data['fee_schedule'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->first();
+
+        $data['invoice'] = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where(['student_id' => $student_id, 'fee_schedule_code' => $fee_schedule_code])->first();
         // dd($data['fee_schedule']);
         $data['student'] = Student::findOrFail($student_id);
+
         $data['school'] = School::findOrFail(1);
-        $exempted_fee_elements = Invoice::where(['student_id'=>$student_id, 'fee_schedule_code'=>$fee_schedule_code])->first()->toArray();
-        if(is_null($exempted_fee_elements['exempted_fee_elements'])){
+
+        $exempted_fee_elements = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where(['student_id'=>$student_id, 'fee_schedule_code'=>$fee_schedule_code])->first();
+        if(is_null($exempted_fee_elements->exempted_fee_elements)){
             $data['exempted_fee_elements'] = array();
         }else{
-            $data['exempted_fee_elements'] = json_decode($exempted_fee_elements['exempted_fee_elements']);
+            $data['exempted_fee_elements'] = json_decode($exempted_fee_elements->exempted_fee_elements);
         }  
 
         return view('billing.invoices.invoice', $data);    
@@ -114,10 +133,10 @@ class invoicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($student_id, $fee_schedule_code)
-    {
+        public function edit($student_id, $fee_schedule_code)
+        {
         //
-    }
+        }
 
     /**
      * Show the form for editing the specified resource.
@@ -127,18 +146,20 @@ class invoicesController extends Controller
      */
     public function edit_student_invoice ($student_id, $fee_schedule_code) {
 
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
         $data['title'] = 'Fee Schedule';
         $data['fee_schedules_menu'] = 1;
         $data['student_id'] = $student_id;
         $data['fee_schedule_code'] = $fee_schedule_code;
-        $data['fee_schedules'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->first();
+        $data['fee_schedules'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->first();
         $data['fee_elements'] = FeeElement::where('status_id', 1)->get();
-        $data['current_elements'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->lists('amount', 'fee_element_id')->toArray();
-        $exempted_fee_elements = Invoice::where(['student_id'=>$student_id, 'fee_schedule_code'=>$fee_schedule_code])->first()->toArray();
-        if(is_null($exempted_fee_elements['exempted_fee_elements'])){
+        $data['current_elements'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->lists('amount', 'fee_element_id');
+        $exempted_fee_elements = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where(['student_id'=>$student_id, 'fee_schedule_code'=>$fee_schedule_code])->first();
+        if(is_null($exempted_fee_elements->exempted_fee_elements)){
             $data['exempted_fee_elements'] = array();
         }else{
-            $data['exempted_fee_elements'] = json_decode($exempted_fee_elements['exempted_fee_elements']);
+            $data['exempted_fee_elements'] = json_decode($exempted_fee_elements->exempted_fee_elements);
         }        
         // dd($data['exempted_fee_elements']);
 
@@ -152,10 +173,10 @@ class invoicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+        public function update(Request $request, $id)
+        {
         //
-    }
+        }
 
     /**
      * Update the specified resource in storage.
@@ -165,21 +186,31 @@ class invoicesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update_student_invoice (Request $request) {
-        // dd($request);
-        $current_elements = FeeSchedule::where('fee_schedule_code', $request->fee_schedule_code)->lists('fee_element_id')->toArray();
-        $discount = Invoice::select('discount')->where(['student_id'=>$request->student_id, 'fee_schedule_code'=>$request->fee_schedule_code])->first()->discount;
+        // dd($request->element_id);
+
+        // get all original elements before editing
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $current_elements = DB::table($table)->where('fee_schedule_code', $request->fee_schedule_code)->lists('fee_element_id');
+
+        //get discount for this student
+        $discount = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->select('discount')->where(['student_id'=>$request->student_id, 'fee_schedule_code'=>$request->fee_schedule_code])->first()->discount;
         
+
+        //get the element that is being exempted
         if(null !== $request->element_id){
             $exempted_fee_elements = array_values(array_diff($current_elements, $request->element_id)); 
         }else{
             $exempted_fee_elements=$current_elements;
         }
 
+
+        //get new amount on elements being billed for
         if(null !== $request->element_id){
             $accepted_fee_elements = $request->element_id;
             $amount = 0;
             foreach ($accepted_fee_elements as $accepted_fee_element) {
-                $amount += FeeSchedule::select('amount')->where(['fee_schedule_code'=>$request->fee_schedule_code, 'fee_element_id'=>$accepted_fee_element])->first()->amount;
+                $amount += DB::table($table)->select('amount')->where(['fee_schedule_code'=>$request->fee_schedule_code, 'fee_element_id'=>$accepted_fee_element])->first()->amount;
             }
         }else{
             $amount = 0;
@@ -187,12 +218,21 @@ class invoicesController extends Controller
         // dd($amount);
 
         //update this particular student's invoice
-        $invoice = \DB::table('invoices')
-                    ->where(['student_id'=> $request->student_id, 'fee_schedule_code'=> $request->fee_schedule_code])
-                    ->update([  'exempted_fee_elements'=> json_encode($exempted_fee_elements),
-                                'amount'=> $amount,
-                                'total' => $amount - $discount
-                            ]);
+        try {
+            $invoice = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))
+            ->where(['student_id'=> $request->student_id, 'fee_schedule_code'=> $request->fee_schedule_code])
+            ->update([  'exempted_fee_elements'=> json_encode($exempted_fee_elements),
+                'amount'=> $amount,
+                'total' => $amount - $discount
+                ]);
+
+        }catch (\Illuminate\Database\QueryException $e){
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                session()->flash('flash_message', 'Hey, these guys have been invoiced');
+                return \Redirect::back();
+            }
+        }
 
 
         //ensure at least on element was selected
@@ -209,7 +249,7 @@ class invoicesController extends Controller
         $data['term'] = $request->term_id;
 
         //get invoices
-        $data['invoices'] = Invoice::where('fee_schedule_code', $fee_schedule_code)->get();
+        $data['invoices'] = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where('fee_schedule_code', $fee_schedule_code)->get();
 
         //create array to hole school session starting 10 yrs from current date
         $sessions = ['Select Session'];
@@ -248,49 +288,64 @@ class invoicesController extends Controller
      */
     public function bill_class ($fee_schedule_code) {
         // dd($fee_schedule_code);
-        $fee_schedule = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->first();
-        $amount = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->sum('amount');
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $fee_schedule = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->first();
+        $amount = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->sum('amount');
         $students = Student::where('class_id', $fee_schedule->class_id)->get();
+        $school = School::find(1);
 
         //get all studenta ids who are eligible for the parent discount
-        $parent_discount_eligible = Helper::getParentDiscountEligibles();
+        if ($school->parent_discount == 1) {
+            $children_number = DiscountPolicy::find(1)->children_number;
+            if ($children_number == null) {
+                session()->flash('flash_message', 'Please, set the parent discount values. Go to Billing-> Discount Policies.');
+                return redirect()->back();
+            }
+            $parent_discount_eligible = Helper::getParentDiscountEligibles();
+            sort($parent_discount_eligible);  
+        }
+        
         // dd($parent_discount_eligible);
 
         foreach ($students as $student) {
 
+            $discount = 0;
+
         	//get parent discount
-        	if( in_array ($student->id, $parent_discount_eligible)) {
+            if ($school->parent_discount == 1) {
+                if( in_array ($student->id, $parent_discount_eligible)) {
 
-                $discount = Helper::calculateParentDiscount($student->id, $fee_schedule_code);
+                    $discount = Helper::calculateParentDiscount($student->id, $fee_schedule_code);
+                // dd($discount);
 
-        	}
+                }
+            }
 
         	//calculate total amount due to be paid
             $total = $amount - $discount;
 
             try{
-                Invoice::create([   'student_id' => $student->id,
-                                    'fee_schedule_code' => $fee_schedule_code,
-                                    'invoice_number' => str_replace('-', '', $fee_schedule_code).str_pad($student->id, 3, '0', STR_PAD_LEFT),
-                                    'amount' => $amount,
-                                    'discount' => $discount,
-                                    'balance' => Helper::getStudentCurrentBalance($student->id),
-                                    'total' => $total]);
+                \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->insert([   'student_id' => $student->id,
+                    'fee_schedule_code' => $fee_schedule_code,
+                    'invoice_number' => str_replace('-', '', $fee_schedule_code).str_pad($student->id, 3, '0', STR_PAD_LEFT),
+                    'amount' => $amount,
+                    'discount' => $discount,
+                    'balance' => Helper::getStudentCurrentBalance($student->id),
+                    'total' => $total]);
 
-                }catch (\Illuminate\Database\QueryException $e){
-                    $errorCode = $e->errorInfo[1];
-                    if($errorCode == 1062){
-                        session()->flash('flash_message', 'Hey, these guys have been invoiced');
-                        return \Redirect::back();
-                    }
+            }catch (\Illuminate\Database\QueryException $e){
+                $errorCode = $e->errorInfo[1];
+                if($errorCode == 1062){
+                    session()->flash('flash_message', 'Hey, these guys have been invoiced');
+                    return \Redirect::back();
                 }
+            }
 
-            //reset discount to zero
-            $discount = 0;
         }
-
+        
         //change the status of the fee schedule after billing class
-        FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->update(['status_id' => 8]);
+        DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->update(['status_id' => 8]);
 
         return redirect()->to('billing/invoices');
 
@@ -333,7 +388,7 @@ class invoicesController extends Controller
         $data['term'] = $request->term_id;
 
         //get invoices
-        $data['invoices'] = Invoice::where('fee_schedule_code', $fee_schedule_code)->get();
+        $data['invoices'] = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where('fee_schedule_code', $fee_schedule_code)->get();
 
         //create array to hole school session starting 10 yrs from current date
         $sessions = ['Select Session'];
@@ -362,17 +417,20 @@ class invoicesController extends Controller
      */
     public function mail_invoice ($student_id, $fee_schedule_code) {
 
-        $data['fee_elements'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->get();
-        $data['fee_schedule'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->first();
-        $data['invoice'] = Invoice::where(['student_id' => $student_id, 'fee_schedule_code' => $fee_schedule_code])->first();
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $data['fee_elements'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->get();
+        $data['fee_schedule'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->first();
+        $data['invoice'] = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where(['student_id' => $student_id, 'fee_schedule_code' => $fee_schedule_code])->first();
         // dd($data['fee_schedule']);
-        $data['student'] = Student::findOrFail($student_id);
+        $student = Student::findOrFail($student_id);
+        $data['student'] = $student;
         $data['school'] = School::findOrFail(1);
 
         //get this students parent
         $data['parent_email'] = $data['student']->studentParent->email;
 
-        $send_mail = Helper::sendStudentInvoice($data, $student_id);
+        $send_mail = Helper::sendStudentInvoice($data, $student);
 
         // dd($send_mail);
 

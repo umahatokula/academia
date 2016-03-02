@@ -10,7 +10,7 @@
 	@foreach($fee_schedules as $fee_schedule)
 		<tr>
 			<td style="text-align:center">{!! $count !!}</td>
-			<td>{!! $fee_schedule->feeElement->name !!}</td>
+			<td>{!! $fee_schedule->name !!}</td>
 			<td style="text-align:right">{!! number_format($fee_schedule->amount , 2) !!}</td>
 		</tr>
 	<?php $count++; ?>

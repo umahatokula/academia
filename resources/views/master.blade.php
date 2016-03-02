@@ -331,60 +331,7 @@ if(null !== \Session::get('message')){ ?>
       </script>
     </div>
 
-  
-  <div class="footer-sticked-chat"><!-- Start: Footer Sticked Chat -->
-  
-      <script type="text/javascript">
-    function toggleSampleChatWindow(){
-      var $chat_win = jQuery("#sample-chat-window");
-  
-      $chat_win.toggleClass('open');
-  
-      if($chat_win.hasClass('open'))
-      {
-        var $messages = $chat_win.find('.ps-scrollbar');
-  
-        if($.isFunction($.fn.perfectScrollbar))
-        {
-          $messages.perfectScrollbar('destroy');
-  
-          setTimeout(function(){
-            $messages.perfectScrollbar();
-            $chat_win.find('.form-control').focus();
-          }, 300);
-        }
-      }
-  
-      jQuery("#sample-chat-window form").on('submit', function(ev)
-      {
-        ev.preventDefault();
-      });
-    }
-  
-    jQuery(document).ready(function($){
-      $(".footer-sticked-chat .chat-user, .other-conversations-list a").on('click', function(ev)
-      {
-        ev.preventDefault();
-        toggleSampleChatWindow();
-      });
-  
-      $(".mobile-chat-toggle").on('click', function(ev)
-      {
-        ev.preventDefault();
-  
-        $(".footer-sticked-chat").toggleClass('mobile-is-visible');
-      });
-    });
-    </script>
-  
-    <a href="#" class="mobile-chat-toggle">
-      <i class="linecons-comment"></i>
-      <span class="num">6</span>
-      <span class="badge badge-purple">4</span>
-    </a>
-  
-  <!-- End: Footer Sticked Chat -->
-  </div>
+
   
   <!-- Page Loading Overlay -->
   <!-- <div class="page-loading-overlay">

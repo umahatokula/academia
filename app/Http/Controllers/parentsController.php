@@ -119,7 +119,7 @@ class parentsController extends Controller
     {
         $data['parent'] = StudentParent::find($id);
         $data['parents_menu'] = 1;
-        $data['title'] = 'Add Parent';
+        $data['title'] = 'Edit Parent';
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');
         $data['bloodGroups'] = BloodGroup::lists('blood_group', 'id')->prepend('Please Select');
         $data['locals'] = Local::lists('local_name', 'id')->prepend('Please Select');

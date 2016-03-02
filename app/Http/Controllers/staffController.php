@@ -95,6 +95,7 @@ class staffController extends Controller
      */
     public function edit($id)
     {
+        $data['title'] = 'Edit Staff';
         $data['staff'] = Staff::find($id);
         $data['staff_menu'] = 1;
         $data['gender'] = Gender::lists('gender', 'id')->prepend('Please Select');

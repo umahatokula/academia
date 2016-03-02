@@ -35,10 +35,11 @@ class classesController extends Controller
      */
     public function create()
     {
-        $data['title'] = 'Craete Class';
+        $data['title'] = 'Create Class';
         $data['classes_menu'] = 1;
         $data['staffs'] = Staff::select(\DB::raw('concat (fname," ",lname) as full_name, id'))->where('staff_type_id', 1)->lists('full_name', 'id')->prepend('Please Select');
         $data['subjects'] = Subject::lists('subject', 'id')->prepend('Please Select');
+        $data['classes'] = studentClass::lists('name', 'id')->prepend('Please Select');
         return view('settings.class.create', $data);
     }
 
@@ -51,11 +52,12 @@ class classesController extends Controller
     public function store(createClassRequest $request)
     {
         // dd($request->all());
-        dd($request->subject_id);
+        // dd($request->subject_id);
         $class = new StudentClass;
         $class->name = $request->name;
         $class->staff_id = $request->staff_id;
         $class->max_students = $request->max_students;
+        $class->promotion_class_id = $request->promotion_class_id;
         $class->save();
 
         for ($i=0; $i < count($request->subject_id) ; $i++) { 
@@ -68,7 +70,7 @@ class classesController extends Controller
             
         }
 
-        DB::statement();
+        // DB::statement();
 
         session()->flash('flash_message', 'Class successfully created.');
         session()->flash('flash_message_important', true);

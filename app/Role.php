@@ -13,4 +13,9 @@ class Role extends Model
      return $this->belongsToMany('\App\User', 'role_users');
     }
 
+
+    public function scopeNoncoder($query){
+     return $query->where('slug', '!=', 'coder');
+    }
+
 }

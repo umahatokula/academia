@@ -59,6 +59,16 @@
                   {!! Form::input('number', 'max_students', null, ['class' => 'form-control ']) !!}
                   </div>
                 </div>
+
+                <div class="form-group-separator"></div>
+
+                <div class="form-group {{ $errors->has('promotion_class_id')? 'has-error' : ''}}">
+                  {!! Form::label('promotion_class_id', 'Promotion Class', array('class' => 'col-sm-4 control-label', 'for' => 'promotion_class_id')) !!}
+      
+                  <div class="col-sm-8">
+                  {!! Form::select('promotion_class_id', $classes, null, ['class' => 'form-control ']) !!}
+                  </div>
+                </div>
                 </fieldset>
                 
 

@@ -89,7 +89,8 @@
                     </thead>
 
                     <tbody class="middle-align"><?php //dd($users->person); ?>
-                    @foreach($users as $user)
+                      @foreach($users as $user)
+                      @if($user->staff)
                       <tr>
                         <td>
                           <input type="checkbox" class="cbr">
@@ -97,7 +98,7 @@
                         <td>{!! ($user->staff->fname.' '.$user->staff->lname) !!}</td>
                         <td>
                           @foreach($user->roles  as $role)
-                            {!! $role->name  !!}<br>
+                          {!! $role->name  !!}<br>
                           @endforeach
                         </td>
                         <td>{!! $user->email !!}</td>
@@ -115,7 +116,8 @@
                           </a>
                         </td>
                       </tr>
-                    @endforeach
+                      @endif
+                      @endforeach
                     </tbody>
                   </table>
 

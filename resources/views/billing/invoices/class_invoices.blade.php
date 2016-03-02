@@ -24,8 +24,8 @@
                   <tbody>
                     <tr>
                       <td style="text-align:center">{!! Form::select('class_id',$classes, null, array('class' => 'form-control', 'id' => 'code')) !!}</td>
-                      <td style="text-align:center">{!! Form::select('session', $sessions, null, array('class' => 'form-control', 'id' => 'code')) !!}</td>
-                      <td style="text-align:center">{!! Form::select('term_id', $terms, null, array('class' => 'form-control', 'id' => 'code')) !!}</td>
+                      <td style="text-align:center">{!! Form::select('session', $sessions, session()->get('current_session'), array('class' => 'form-control', 'id' => 'code')) !!}</td>
+                      <td style="text-align:center">{!! Form::select('term_id', $terms, session()->get('current_term'), array('class' => 'form-control', 'id' => 'code')) !!}</td>
                       <td style="text-align:center">{!! Form::submit('Go', array('class' => 'form-control btn btn-secondary')) !!}</td>
                     </tr>
                   </tbody>
@@ -38,12 +38,15 @@
         </div>
 </div>
 
-<?php if(isset($invoices)){ ?>
+<?php 
+	if(isset($invoices)) { 
+	$suffix = \App\Helpers\Helper::get_suffix($term);
+?>
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
 	                    <div class="panel-heading">
-	                      <h3 class="panel-title">Invoices for {!! $class.', '.$session.', '.$term.' term' !!}</h3>
+	                      <h3 class="panel-title">Invoices for {!! $class.', '.$session.', '.$term.$suffix.' term' !!}</h3>
 	                      <div class="panel-options">
 	                        <a href="#" data-toggle="panel">
 	                          <span class="collapse-icon">&ndash;</span>
@@ -94,15 +97,19 @@
 	                    	<?php $count = 1; ?>
 	                    	@foreach($invoices as $invoice)
 	                    		<tr>
+	                    			<?php 
+	                    			$student = \App\Student::find($invoice->student_id);
+	                    			$status = \App\Status::find($invoice->status_id);
+	                    			?>
 	                    			<td style="text-align:center">{!! $count !!}</td>
-	                    			<td><a href="{!! route('admin.students.show', array($invoice->student->id)) !!}">{!! $invoice->student->lname.' '.substr($invoice->student->mname,0 ,1).'. '.$invoice->student->fname !!}</a></td>
+	                    			<td><a href="{!! route('admin.students.show', array($student->id)) !!}">{!! $student->lname.' '.substr($student->mname,0 ,1).'. '.$student->fname !!}</a></td>
 	                    			<td style="text-align:right">{!! number_format($invoice->amount , 2) !!}</td>
 	                    			<td style="text-align:right">{!! number_format($invoice->discount , 2) !!}</td>
 	                    			<td style="text-align:right">{!! number_format($invoice->balance , 2) !!}</td>
 	                    			<td style="text-align:right">{!! number_format($invoice->total , 2) !!}</td>
 		                            <td style="text-align:center">
 		                              <div class="label {{ $invoice->status_id == 4? 'label-default': '' }}{{ $invoice->status_id == 8? 'label-success disabled': '' }}">
-		                                {!! $invoice->status->status !!}
+		                                {!! $status->status !!}
 		                              </div>
 		                            </td>
 	                    			<td style="text-align:center">

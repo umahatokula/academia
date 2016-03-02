@@ -22,7 +22,9 @@ class schoolController extends Controller
     {
         $data['title'] = 'School Settings';
         $data['school_menu'] = 1;
-        $data['school'] = School::find(1);
+
+        $school = School::find(1);
+        $data['school'] = $school;
 
         //create array to hole school session starting 10 yrs from current date
         $sessions = ['Select Session'];
@@ -34,6 +36,8 @@ class schoolController extends Controller
         $data['sessions'] = $sessions;
 
         $data['terms'] = ['Select Term', 1, 2,3];
+
+        $data['current_term'] = \DB::table('current_term')->orderBy('created_at', 'desc')->first();
 
         return view('settings.school.index', $data);
     }
@@ -64,13 +68,13 @@ class schoolController extends Controller
     {
         // dd($request->logo);
         $rules = [  'name'              => 'required',
-                    'logo'              => 'required',
-                    'line1'             => 'required',
-                    'line2'             => 'required',
-                    'line3'             => 'required',
-                    'bank_id'           => 'required',
-                    'account_name'      => 'required',
-                    'account_number'    => 'required'];
+        'logo'              => 'required',
+        'line1'             => 'required',
+        'line2'             => 'required',
+        'line3'             => 'required',
+        'bank_id'           => 'required',
+        'account_name'      => 'required',
+        'account_number'    => 'required'];
         $this->validate($request, $rules);
 
         $data = School::find(1); 
@@ -113,7 +117,10 @@ class schoolController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['school'] = School::find(1);
+        $data['banks'] = Bank::lists('name', 'id')->prepend('Please Select');
+
+        return view('settings.school.edit', $data);
     }
 
     /**
@@ -125,7 +132,38 @@ class schoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->logo);
+        $rules = [  
+        'name'              => 'required',
+        'logo'              => 'required',
+        'line1'             => 'required',
+        'line2'             => 'required',
+        'line3'             => 'required',
+        'bank_id'           => 'required',
+        'account_name'      => 'required',
+        'account_number'    => 'required'];
+        $this->validate($request, $rules);
+
+        $school = School::find(1); 
+
+        $school->name = $request->name;
+        $school->logo = $request->logo;
+        $school->phone = $request->phone;
+        $school->email = $request->email;
+        $school->swift_code = $request->swift_code;
+        $school->line1 = $request->line1;
+        $school->line2 = $request->line2;
+        $school->line3 = $request->line3;
+        $school->bank_id = $request->bank_id;
+        $school->account_name = $request->account_name;
+        $school->account_number = $request->account_number;
+        $school->save();
+
+        // $imageName = $school->id.'.'.$request->logo->getClientOriginalExtension();
+
+        // $request->logo->move(base_path().'/public/assets/images/logo/', $imageName);
+
+        return redirect()->to('settings/school');
     }
 
     /**
@@ -152,13 +190,13 @@ class schoolController extends Controller
                 'term'          => $request->term,
                 'created_at'    => date('Y-m-d H:i:s'),
                 'updated_at'    => date('Y-m-d H:i:s'),]);
-            }catch (\Illuminate\Database\QueryException $e){
-                $errorCode = $e->errorInfo[1];
-                if($errorCode == 1062){
-                    session()->flash('flash_message', 'Session and Term variables have alreaddy been created.');
-                    return \Redirect::back()->withInput($request->except('element_id', 'amount'));
-                }
+        }catch (\Illuminate\Database\QueryException $e){
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                session()->flash('flash_message', 'These Session and Term variables have alreaddy been created.');
+                return \Redirect::back()->withInput($request->except('element_id', 'amount'));
             }
+        }
 
         //store session and term info in session
         $term_info = \DB::table('current_term')->orderBy('created_at', 'desc')->first();
@@ -173,6 +211,49 @@ class schoolController extends Controller
 
         //create subject exemption table for the new session/term
         NewTerm::createSubjectExemption($request->session, $request->term);
+
+        //create invoices table for the new session/term
+        NewTerm::createInvoices($request->session, $request->term);
+
+        //create promotion table for the new session/term
+        NewTerm::createPromotionTable($request->session, $request->term);
+
+        //create fee schedule table for the new session/term
+        NewTerm::createFeeScheduleTable($request->session, $request->term);
+
+        return redirect()->back();
+    }
+
+
+    public function promotion_avg(Request $request) {
+        $school = School::find(1);
+        $school->promotion_avg = $request->promotion_avg;
+        $school->save();
+
+        return redirect()->back();
+    }
+
+    public function discount_policies(Request $request) {
+        // dd($request);
+
+        if (isset($request->parent_discount)) {
+            $parent_discount = 1;
+        } else {
+            $parent_discount = 0;
+        }
+
+
+        if (isset($request->staff_discount)) {
+            $staff_discount = 1;
+        } else {
+            $staff_discount = 0;
+        }
+
+
+        $school = School::find(1);
+        $school->parent_discount = $parent_discount;
+        $school->staff_discount = $staff_discount;
+        $school->save();
 
         return redirect()->back();
     }

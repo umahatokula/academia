@@ -1,5 +1,9 @@
 <div class="sidebar-menu toggle-others fixed">
 <?php //dd(\Session::get('user')->staff_id) ?>
+<?php 
+$user = \Sentinel::getUser();
+$roles = session('roles');
+?>
     
       <div class="sidebar-menu-inner">
         
@@ -29,11 +33,11 @@
           </div>
     
           <!-- This will open the popup with user profile settings, you can use for any purpose, just be creative -->
-          <div class="settings-icon">
+          <!-- <div class="settings-icon">
             <a href="#" data-toggle="settings-pane" data-animate="true">
               <i class="linecons-cog"></i>
             </a>
-          </div>
+          </div> -->
         </header>
 
         <!-- Sidebar User Info Bar - Added in 1.3 -->
@@ -44,13 +48,15 @@
         
               <span>
                 <strong>{!! Sentinel::getUser()->first_name !!}</strong>
-                Page admin
+                @foreach($roles as $role)
+                {!! $role->name  !!} <br>
+                @endforeach
               </span>
             </a>
         
             <ul class="user-links list-unstyled">
               <li>
-                <a href="" title="Edit profile">
+                <a href="{!! route('admin.staff.show', array(Sentinel::getUser()->staff_id )) !!}" title="View profile">
                   <i class="linecons-user"></i>
                   View profile
                 </a>
@@ -80,12 +86,17 @@
               <span class="title">Dashboard</span>
             </a>
           </li>
+          <!-- visible to only head teacher, principal and me -->
+          <?php if($user->inRole('coder') || $user->inRole('principal') || $user->inRole('head_teacher')){ ?>
           <li class="{!! (isset($results_menu))? 'opened active': ''; !!}">
             <a href="{!! route('academics.results.index') !!}">
               <i class="linecons-cog"></i>
               <span class="title">Results</span>
             </a>
           </li>
+          <?php } ?>
+          <!-- visible to only admin dept officer, principal and me -->
+          <?php if($user->inRole('coder') || $user->inRole('principal') || $user->inRole('admin_dept_officer')){ ?>
           <li class="{!! (isset($students_menu) || isset($parents_menu) || isset($staff_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-cog"></i>
@@ -109,6 +120,9 @@
               </li>
             </ul>
           </li>
+          <?php } ?>
+          <!-- visible to only billing officer, principal and me -->
+          <?php if($user->inRole('coder') || $user->inRole('principal') || $user->inRole('billing_officer')){ ?>
           <li class="{!! (isset($fee_schedules_menu) || isset($fee_elements_menu) || isset($invoice_menu) || isset($discount_policies_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-desktop"></i>
@@ -137,6 +151,30 @@
               </li>
             </ul>
           </li>
+          <?php } ?>
+          <!-- visible to only accounts officer, principal and me -->
+          <?php if($user->inRole('coder') || $user->inRole('principal') || $user->inRole('accounts_officer')){ ?>
+          <li class="{!! (isset($accounts_menu))? 'opened active': ''; !!}">
+            <a href="#">
+              <i class="linecons-desktop"></i>
+              <span class="title">Accounts</span>
+            </a>
+            <ul>
+              <li class="{!! (isset($payments_menu) && $payments_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('payments') !!}">
+                  <span class="title">Payments</span>
+                </a>
+              </li>
+              <li class="{!! (isset($accounts_menu) && $accounts_menu == 1)? 'opened active': ''; !!}">
+                <a href="{!! url('accounts/reports') !!}">
+                  <span class="title">Reports</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <?php } ?>
+          <!-- visible to only principal and me -->
+          <?php if($user->inRole('coder') || $user->inRole('principal')){ ?>
           <li class="{!! (isset($classes_menu) || isset($subjects_menu) || isset($school_menu) || isset($users_menu))? 'opened active': ''; !!}">
             <a href="#">
               <i class="linecons-desktop"></i>
@@ -163,13 +201,16 @@
                   <span class="title">Users</span>
                 </a>
               </li>
+              <?php if($user->inRole('coder')){ ?>
               <li>
                 <a href="{!! url('settings/roles') !!}">
                   <span class="title">Roles &amp; Permissions</span>
                 </a>
               </li>
+              <?php } ?>
             </ul>
           </li>
+          <?php } ?>
         </ul>
       </li>
     </ul>

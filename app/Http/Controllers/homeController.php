@@ -24,17 +24,37 @@ class homeController extends Controller
         $data['title'] = 'Home';
         $data['home'] = 1;
         $staff = Staff::find(\Session::get('user')->staff_id);
-        $classes = array('Please select a class');
-        foreach ($staff->classes as  $class) {
-            $classes[$class->id] = $class->name;
+        // dd($staff);
+        if($staff) {
+            $classes = array('Please select a class');
+            foreach ($staff->classes as  $class) {
+                $classes[$class->id] = $class->name;
+            }
+            $data['classes'] = $classes;
         }
-        $data['classes'] = $classes;
+        
+        if(session('user')->inRole('coder') || session('user')->inRole('principal')){
 
-        if(session('user')->inRole('head_teacher')){
+            return view('dashboard', $data);
+
+        }elseif(session('user')->inRole('head_teacher')){
+
             return view('dashboard_head_teacher', $data);
-        }
 
-        return view('dashboard', $data);
+        }elseif(session('user')->inRole('billing_officer')){
+
+            // return view('dashboard_billing_officer', $data);
+            return redirect()->route('billing.fee_schedules.index');
+
+        }elseif(session('user')->inRole('admin_dept_officer')){
+
+            return view('dashboard_head_teacher', $data);
+
+        }else{
+            
+            return view('unauthorized', $data);
+        }
+        
     }
 
     /**

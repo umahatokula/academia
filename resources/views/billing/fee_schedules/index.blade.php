@@ -77,13 +77,13 @@
                 <?php //dd($fee_schedule->session); ?>
                 <tr>
                   <td style="text-align:center">{!! $counter !!}</td>
-                  <td>{!! $fee_schedule->studentClass->name !!}</td>
-                  <td style="text-align:center">{!! $fee_schedule->term->term !!}</td>
+                  <td>{!! $fee_schedule->name !!}</td>
+                  <td style="text-align:center">{!! $fee_schedule->term !!}</td>
                   <td style="text-align:center">{!! $fee_schedule->session !!}</td>
                   <td style="text-align:right">{!! number_format(\App\Helpers\Helper::getFeeScheduleTotal($fee_schedule->fee_schedule_code), 2) !!}</td>
                                 <td style="text-align:center">
                                   <div class="label {{ $fee_schedule->status_id == 1? 'label-success': '' }}{{ $fee_schedule->status_id == 8? 'label-purple disabled': '' }}">
-                                    {!! $fee_schedule->status->status !!}
+                                    {!! $fee_schedule->status !!}
                                   </div>
                                 </td>
                   <td style="text-align:center">

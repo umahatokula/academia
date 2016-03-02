@@ -18,7 +18,7 @@ class Admin
         //get currrnt user
         $user = \Sentinel::getUser();
 
-        if($user->inRole('super_administrator')){
+        if($user->inRole('coder')){
             return $next($request);
         } else{
             return \Redirect::back()->with('message', 'You do not have the permission to access this page');

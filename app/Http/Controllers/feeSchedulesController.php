@@ -26,7 +26,13 @@ class feeSchedulesController extends Controller
         $data['title'] = 'Fee Schedule';
         $data['fee_schedules_menu'] = 1;
         // $data['fee_schedules'] = FeeSchedule::all();
-        $data['fee_schedules'] = FeeSchedule::groupBy('fee_schedule_code')->get();
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $data['fee_schedules'] = DB::table($table)
+        ->join('classes', 'classes.id', '=', $table.'.class_id')
+        ->join('terms', 'terms.id', '=', $table.'.term_id')
+        ->join('fee_elements', 'fee_elements.id', '=', $table.'.fee_element_id')
+        ->join('status', 'status.id', '=', $table.'.status_id')
+        ->groupBy('fee_schedule_code')->get();
         // dd($data['fee_schedules']);
 
         return view('billing.fee_schedules.index', $data);
@@ -93,17 +99,19 @@ class feeSchedulesController extends Controller
         // {class_id}{session}{term_id}
         $fee_schedule_code = strval($request->class_id).($request->session).strval($request->term_id);
 
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+
         for ($i=0; $i < count($request->element_id); $i++) { 
 
             try{
-                DB::table('fee_schedules')->insert([
-                'fee_schedule_code'     => $fee_schedule_code,
-                'fee_element_id'        => $request->element_id[$i],
-                'amount'                => $request->amount[$i],
-                'session'               => $request->session,
-                'term_id'               => $request->term_id,
-                'class_id'              => $request->class_id
-                ]);
+                DB::table($table)->insert([
+                    'fee_schedule_code'     => $fee_schedule_code,
+                    'fee_element_id'        => $request->element_id[$i],
+                    'amount'                => $request->amount[$i],
+                    'session'               => $request->session,
+                    'term_id'               => $request->term_id,
+                    'class_id'              => $request->class_id
+                    ]);
             }catch (\Illuminate\Database\QueryException $e){
                 $errorCode = $e->errorInfo[1];
                 if($errorCode == 1062){
@@ -126,7 +134,14 @@ class feeSchedulesController extends Controller
     {
         $data['title'] = 'Fee Schedule';
         $data['fee_schedules_menu'] = 1;
-        $data['fee_schedules'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->get();
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $data['fee_schedules'] = DB::table($table)
+        ->join('classes', 'classes.id', '=', $table.'.class_id')
+        ->join('terms', 'terms.id', '=', $table.'.term_id')
+        ->join('fee_elements', 'fee_elements.id', '=', $table.'.fee_element_id')
+        ->join('status', 'status.id', '=', $table.'.status_id')
+        ->where('fee_schedule_code', $fee_schedule_code)->get();
 
         return view('billing.fee_schedules.show', $data);
     }
@@ -141,9 +156,11 @@ class feeSchedulesController extends Controller
     {
         $data['title'] = 'Fee Schedule';
         $data['fee_schedules_menu'] = 1;
-        $data['fee_schedules'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->first();
+
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $data['fee_schedules'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->first();
         $data['fee_elements'] = FeeElement::where('status_id', 1)->get();
-        $data['current_elements'] = FeeSchedule::where('fee_schedule_code', $fee_schedule_code)->lists('amount', 'fee_element_id')->toArray();
+        $data['current_elements'] = DB::table($table)->where('fee_schedule_code', $fee_schedule_code)->lists('amount', 'fee_element_id');
         return view('billing.fee_schedules.edit', $data);
     }
 
@@ -157,6 +174,7 @@ class feeSchedulesController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request->all());
+        
         //ensuure at least one element and its corresponding amount was chosen
         if (null == $request->element_id || null == $request->amount) {
             session()->flash('flash_message', 'Select fee elements');
@@ -164,9 +182,12 @@ class feeSchedulesController extends Controller
         }
 
         $merged = array_combine($request->element_id, $request->amount);
-        // dd($merged);
 
-        $current_elements = FeeSchedule::where('fee_schedule_code', $request->fee_schedule_code)->lists('fee_element_id')->toArray();
+        //fee schedule table for current seesion and term
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+
+
+        $current_elements = DB::table($table)->where('fee_schedule_code', $request->fee_schedule_code)->lists('fee_element_id');
         // $current_elements = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($current_elements)), FALSE);
         // dd(array_flip($current_elements));
 
@@ -180,7 +201,7 @@ class feeSchedulesController extends Controller
             foreach ($elements_to_remove as $element_id) {
 
                 try{
-                    DB::table('fee_schedules')->where(['fee_schedule_code' => $request->fee_schedule_code, 'fee_element_id' => $element_id ])->delete();
+                    DB::table($table)->where(['fee_schedule_code' => $request->fee_schedule_code, 'fee_element_id' => $element_id ])->delete();
                 }catch (\Illuminate\Database\QueryException $e){
                     $errorCode = $e->errorInfo[1];
                     if($errorCode == 1062){
@@ -198,7 +219,7 @@ class feeSchedulesController extends Controller
                 // dd($element_amount);
 
                 try{
-                    DB::table('fee_schedules')
+                    DB::table($table)
                     ->where(['fee_schedule_code' => $request->fee_schedule_code, 'fee_element_id' => $element_id ])
                     ->update(['amount' => $element_amount]);
 
@@ -218,14 +239,14 @@ class feeSchedulesController extends Controller
             foreach ($elements_to_add as $element_amount => $element_id) {
 
                 try{
-                    DB::table('fee_schedules')->insert([
-                    'fee_schedule_code'     => $request->fee_schedule_code,
-                    'fee_element_id'        => $element_id,
-                    'amount'                => $element_amount,
-                    'session'               => $request->session,
-                    'term_id'               => $request->term_id,
-                    'class_id'              => $request->class_id
-                    ]);
+                    DB::table($table)->insert([
+                        'fee_schedule_code'     => $request->fee_schedule_code,
+                        'fee_element_id'        => $element_id,
+                        'amount'                => $element_amount,
+                        'session'               => $request->session,
+                        'term_id'               => $request->term_id,
+                        'class_id'              => $request->class_id
+                        ]);
                 }catch (\Illuminate\Database\QueryException $e){
                     $errorCode = $e->errorInfo[1];
                     if($errorCode == 1062){
@@ -259,7 +280,8 @@ class feeSchedulesController extends Controller
      */
     public function activate($id)
     {
-        $fee_schedule = FeeSchedule::find($id);
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $fee_schedule = DB::table($table)->where('fee_schedule_code',$fee_schedule_code);
         $fee_schedule->status_id = 1;
         $fee_schedule->save();
 
@@ -275,7 +297,8 @@ class feeSchedulesController extends Controller
      */
     public function deactivate($id)
     {
-        $fee_schedule = FeeSchedule::find($id);
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $fee_schedule = DB::table($table)->where('fee_schedule_code', $fee_schedule_code);
         $fee_schedule->status_id = 2;
         $fee_schedule->save();
 
@@ -284,7 +307,8 @@ class feeSchedulesController extends Controller
 
 
     public function billClass($fee_schedule_code){
-        $class_id = FeeSchedule::select('class_id')->where('fee_schedule_code', $fee_schedule_code)->first();
+        $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
+        $class_id = DB::table($table)->select('class_id')->where('fee_schedule_code', $fee_schedule_code)->first();
         $students = Student::where('class_id', $class_id->class_id)->get();
 
         foreach ($students as $student) {

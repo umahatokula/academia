@@ -151,11 +151,21 @@
 
                 <div class="form-group-separator"></div>
 
+                <div class="form-group {{ $errors->has('religion_id')? 'has-error' : ''}}">
+                  {!! Form::label('staff', 'Is this parent a staff?', array('class' => 'col-sm-2 control-label', 'for' => 'staff')) !!}
+      
+                  <div class="col-sm-10">
+                  {!! Form::select('staff', [''=>'Please select', '1'=>'Yes', '0'=>'No'], $parent->staff, array('class' => 'form-control', 'id' => 'staff')) !!}
+                  </div>
+                </div>
+
+                <div class="form-group-separator"></div>
+
                 <div class="form-group">
                   {!! Form::label('address', ' ', array('class' => 'col-sm-2 control-label', 'for' => 'address')) !!}
       
                   <div class="col-sm-10">
-                  {!! Form::submit('edit parent', array('class' => 'btn btn-blue')) !!}
+                  {!! Form::submit('save', array('class' => 'btn btn-blue')) !!}
                   </div>
                 </div>
 

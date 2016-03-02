@@ -12,12 +12,13 @@
                         {!! Form::model($user, array('route' => array('settings.users.update', $user->id), 'method' => 'PUT', 'class' => 'form-horizontal', 'role' => 'form')) !!}
 
                           <div class="form-group">
+                          <input name="user" value="{!! $user->staff_id !!}" type="hidden" />
                             <!-- <label class="col-sm-2 control-label" for="field-1">Input text field</label> -->
                             {!! Form::label('user', 'User', array('class' => 'col-sm-4 control-label', 'for' => 'user')) !!}
 
                             <div class="col-sm-6">
                               <!-- <input type="text" class="form-control" id="field-1" placeholder="Placeholder"> -->
-                              {!! Form::select('user', $staff, $user->staff_id, array('class' => 'form-control', 'id' => 'user', 'required')) !!}
+                              {!! Form::select('user', $staff, $user->staff_id, array('class' => 'form-control', 'id' => 'user', 'required', 'disabled')) !!}
                             </div>
 
                           </div>

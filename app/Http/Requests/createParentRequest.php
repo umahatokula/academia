@@ -31,13 +31,13 @@ class createParentRequest extends Request
             'phone'             => 'min:11|required',
             'address'           => 'required',
             'occupation'        => 'required',
-            'gender_id'         => 'integer|required',
-            'country_id'        => 'integer|required',
-            'state_id'          => 'integer|required',
-            'local_id'          => 'integer|required',
-            'religion_id'       => 'integer|required',
-            'blood_group_id'    => 'integer|required',
-            'staff'             => 'integer|required'
+            'gender_id'         => 'required',
+            'country_id'        => 'required',
+            'state_id'          => 'required',
+            'local_id'          => 'required',
+            'religion_id'       => 'required',
+            'blood_group_id'    => 'required',
+            'staff'             => 'required'
         ];
     }
 }
