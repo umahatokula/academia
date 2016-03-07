@@ -179,11 +179,16 @@ class resultsController extends Controller
 
         //data for selecting class
         $staff = Staff::find(\Session::get('user')->staff_id);
-        $classes = array('Please select a class');
-        foreach ($staff->classes as  $class) {
-            $classes[$class->id] = $class->name;
+        if(\Sentinel::getUser()->inRole('principal') OR \Sentinel::getUser()->inRole('coder')) {
+            $data['classes'] = studentClass::lists('name', 'id')->prepend('Select a class');
+        }else{
+            $classes = array('Please select a class');
+            foreach ($staff->classes as  $class) {
+                $classes[$class->id] = $class->name;
+            }
+            $data['classes'] = $classes;
+
         }
-        $data['classes'] = $classes;
 
 
         // dd($request);

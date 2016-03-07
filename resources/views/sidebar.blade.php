@@ -161,7 +161,7 @@ $roles = session('roles');
             </a>
             <ul>
               <li class="{!! (isset($payments_menu) && $payments_menu == 1)? 'opened active': ''; !!}">
-                <a href="{!! url('payments') !!}">
+                <a href="{!! url('accounts/payments') !!}">
                   <span class="title">Payments</span>
                 </a>
               </li>

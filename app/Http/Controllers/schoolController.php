@@ -221,6 +221,9 @@ class schoolController extends Controller
         //create fee schedule table for the new session/term
         NewTerm::createFeeScheduleTable($request->session, $request->term);
 
+        //create fee school fees payment table for the new session/term
+        NewTerm::createSchoolFeesPaymentTable($request->session, $request->term);
+
         return redirect()->back();
     }
 

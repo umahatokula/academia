@@ -123,8 +123,9 @@ Route::group(['middleware' => 'login'], function(){
 	Route::group(['middleware' => ['accounts_officer']], function(){
 
 
-		Route::post('payments/pay_invoice', array('as'=>'payments.pay_invoice', 'uses'=>'paymentsController@pay_invoice'));
-		Route::resource('payments', 'paymentsController');
+		Route::post('accounts/payments/pay_invoice', array('as'=>'accounts.payments.pay_invoice', 'uses'=>'paymentsController@pay_invoice'));
+		Route::post('accounts/payments/store_pay_invoice', array('as'=>'accounts.payments.store_pay_invoice', 'uses'=>'paymentsController@store_pay_invoice'));
+		Route::resource('accounts/payments', 'paymentsController');
 
 		Route::post('accounts/reports/search', array('as'=>'accounts.reports.search', 'uses'=>'accountsController@reports_search'));
 		Route::resource('accounts/reports', 'accountsController');

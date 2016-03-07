@@ -32,7 +32,7 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="v4-home">
 								<p>
-									@include('payments.pay_invoice', ['student_info' => $student_info, 'student_invoice' => $student_invoice, 'student_fee_elements' => $student_fee_elements, 'exempted_elements'=> $exempted_elements])
+									@include('payments.pay_invoice', ['student_info' => $student_info, 'student_invoice' => $student_invoice, 'student_fee_elements' => $student_fee_elements])
 								</p>
 							</div>
 							<div class="tab-pane" id="v4-profile">
@@ -65,4 +65,33 @@
 @section('page_js')
 <!-- Imported styles on this page -->
 <script src="assets/js/select2/select2.min.js"></script>
+<script type="text/javascript">
+
+	$( "#class_id" ).change(function() {
+
+		var students = <?php echo json_encode($students); ?>;
+		var class_id = $("select[name='class_id'] option:selected").index();
+		// console.log(students);
+
+		var script = document.createElement( 'script' );
+		var students_arr = [];		students_arr.push('<select class="form-control" id="students_id" name="subject_id[]">');
+		$.each(students, function(key, val) {
+			if( class_id == val.class_id) {
+				// console.log(val.class_id);
+				students_arr.push('<option value="'+val.id+'">'+val.fname+" "+val.lname+'</option>');
+			}
+		});
+		$
+		$('#student_id').html(students_arr);
+
+	});
+
+
+	function toggle(source) {
+		checkboxes = document.getElementsByName('elements_paid_for[]');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = source.checked;
+		}
+	}
+</script>
 @stop

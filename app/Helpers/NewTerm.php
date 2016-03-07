@@ -15,6 +15,7 @@ use \App\SubjectExemption;
 use \App\Invoice;
 use \App\Position;
 use \App\Promotion;
+use \App\SchoolFeesPayment;
 use DB;
 
 class NewTerm
@@ -215,6 +216,45 @@ class NewTerm
 				$table->integer('class_id');
 				$table->integer('status_id')->default(1);
 				$table->primary(array('fee_schedule_code', 'fee_element_id'));
+				$table->softDeletes();
+				$table->timestamps();
+			});
+
+
+
+		}catch (\Illuminate\Database\QueryException $e){
+			$errorCode = $e->errorInfo[1];
+			if($errorCode == 1050){
+				$error_msg[] = 'Fee Schedule table for chosen session and term already exists.';
+					// session()->flash('flash_message', 'Invoices table for chosen session and term already exists.');
+					// return \Redirect::back()->withInput();
+			}
+		}
+	}
+
+
+	public static function createSchoolFeesPaymentTable($session, $term_id) {
+		try{
+		//we are using fee_sch_ here istead of fee_schedules_ cos primary keys are too long using the the latter thereby hrowing an error
+			// create new record for this table in the termly records table
+			$school_fees_payment = new SchoolFeesPayment;
+			$school_fees_payment->table_name = 'sch_fee_pay_'.$session.'_'.$term_id;
+			$school_fees_payment->session = $session;
+			$school_fees_payment->term = $term_id;
+			$school_fees_payment->save();
+
+
+			\Schema::create('sch_fee_pay_'.$session.'_'.$term_id, function (Blueprint $table) {
+				$table->increments('id');
+				$table->integer('student_id');
+				$table->string('fee_schedule_code')->nullable();
+				$table->integer('outstanding_balance')->default(0);
+				$table->double('amount', 15, 2)->default(0.00);
+				$table->text('elements_paid_for');
+				$table->string('session');
+				$table->integer('term_id');
+				$table->integer('class_id');
+				$table->integer('status_id')->default(1);
 				$table->softDeletes();
 				$table->timestamps();
 			});
