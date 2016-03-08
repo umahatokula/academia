@@ -234,6 +234,14 @@ class paymentsController extends Controller
 
         if ($data['outstandings'] !== null || $data['student_invoice'] !== null) {
 
+            $sch_fee_payments = SchoolFeesPayment::all();
+            foreach ($sch_fee_payments as $sch_fee_payment) {
+                $term_payments = DB::table($sch_fee_payment->table_name)->where('student_id', $student_id)->orderBy('created_at', 'desc')->get();
+                $payments[] = $term_payments;
+            }
+            // dd(array_flatten($payments));
+            $data['payments'] = array_flatten($payments);
+
             $data['student_info'] = Student::find($student_id);
             $data['classes'] = studentClass::lists('name', 'id')->prepend('Please Select');
             $data['students'] = Student::all();
@@ -242,7 +250,7 @@ class paymentsController extends Controller
             return view('payments.payments', $data);
         } else {
             session()->flash('flash_message', 'An invoice has not been generated for this student.');
-            return redirect()->back();
+            return redirect()->route('accounts.payments.index');
         }
 
     }

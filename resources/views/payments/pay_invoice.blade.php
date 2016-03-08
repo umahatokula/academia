@@ -51,8 +51,8 @@
 				@if($student_invoice)
 				<tr>
 					<td style="text-align: center;">
-						<!-- <input name="db_table[]" value="" type="checkbox" onClick="toggle(this)"> -->
-						&nbsp
+						<input name="db_table[]" value="" type="checkbox" onClick="toggle(this)">
+						<!-- &nbsp -->
 					</td>
 					<td colspan="4">Bill for {!! session()->get('current_session') !!} session, {!! session()->get('current_term').\App\Helpers\Helper::get_suffix(session()->get('current_term')) !!} term</td>	
 				</tr>
@@ -176,11 +176,24 @@
 		<table class="table table-bordered table-stripped table-hover table-condensed">
 			<thead>
 				<tr>
-					<th colspan="4">Transaction History</th>
+					<th colspan="4">Summary Payment History</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody style="font-size: 12px">
+				<?php $counter= 1; ?>
+				@foreach($payments as $payment)
+				<?php 
 
+				$date = strtotime($payment->created_at);
+
+				?>
+				<tr>
+					<td>{!! $counter!!}</td>
+					<td style="text-align: right;">{!! number_format($payment->amount, 2) !!}</td>
+					<td>{!! date("j F Y", $date) !!}</td>
+				</tr>
+				<?php $counter++ ; ?>
+				@endforeach
 			</tbody>
 		</table>
 	</div>

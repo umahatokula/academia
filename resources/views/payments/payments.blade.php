@@ -57,14 +57,14 @@
 @stop
 @section('page_css')
 <!-- Imported styles on this page -->
-<link rel="stylesheet" href="assets/js/daterangepicker/daterangepicker-bs3.css">
-<link rel="stylesheet" href="assets/js/select2/select2.css">
-<link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
-<link rel="stylesheet" href="assets/js/multiselect/css/multi-select.css">
+<link rel="stylesheet" href="{!! asset('assets/js/daterangepicker/daterangepicker-bs3.css') !!}">
+<link rel="stylesheet" href="{!! asset('assets/js/select2/select2.css') !!}">
+<link rel="stylesheet" href="{!! asset('assets/js/select2/select2-bootstrap.css') !!}">
+<link rel="stylesheet" href="{!! asset('assets/js/multiselect/css/multi-select.css') !!}">
 @stop
 @section('page_js')
 <!-- Imported styles on this page -->
-<script src="assets/js/select2/select2.min.js"></script>
+<script src="{!! asset('assets/js/select2/select2.min.js') !!}"></script>
 <script type="text/javascript">
 
 	$( "#class_id" ).change(function() {
