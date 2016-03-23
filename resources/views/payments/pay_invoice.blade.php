@@ -173,7 +173,17 @@
 
 
 	<div class="col-md-4">
-		<table class="table table-bordered table-stripped table-hover table-condensed">
+		<script type="text/javascript">
+			jQuery(document).ready(function($)
+			{
+				$("#example-1").dataTable({
+					aLengthMenu: [
+					[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+					]
+				});
+			});
+		</script>
+		<table class="table table-bordered table-stripped table-hover table-condensed" id="example-1">
 			<thead>
 				<tr>
 					<th colspan="4">Summary Payment History</th>

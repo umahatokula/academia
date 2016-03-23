@@ -59,9 +59,9 @@ class staffController extends Controller
 
         if($request->picture->getClientOriginalExtension() == 'jpg'){
 
-        $imageName = $staff->id.'.'.$request->picture->getClientOriginalExtension();
+            $imageName = $staff->id.'.'.$request->picture->getClientOriginalExtension();
 
-        $request->picture->move(base_path().'/public/assets/images/staff/', $imageName);
+            $request->picture->move(base_path().'/public/assets/images/staff/', $imageName);
 
             session()->flash('flash_message', 'Staff successfully registered.');
             session()->flash('flash_message_important', true);

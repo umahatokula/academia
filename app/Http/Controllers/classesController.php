@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use \App\Http\Requests\createClassRequest;
+use \App\Http\Requests\updateClassRequest;
 use App\Http\Controllers\Controller;
 use DB;
 
@@ -118,10 +119,16 @@ class classesController extends Controller
     {
         // dd($request->all());
         $this->validate($request, ['name' => 'required', 'max_students' => 'integer|required']);
+        
         $class = StudentClass::find($id);
         $class->fill($request->except('subject_id', 'staff'))->save();
 
         $subject_ids = $request->subject_id;
+        // dd($subject_ids);
+        if ($subject_ids == null || !array_sum($subject_ids) > 0) {
+            session()->flash('flash_message', 'Add at least one subject to this class. Changes NOT saved.');
+            return redirect()->back();
+        }
         $staffs = $request->staff;
         // dd($subject_ids);
 

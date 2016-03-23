@@ -27,7 +27,7 @@
                           </div>
                       @endif
               <!-- <form role="form" class="form-horizontal" role="form"> -->
-               {!! Form::model($school, array('route' => array('settings.school.update', $school->id), 'method' => 'PUT', 'class' => 'form-horizontal', 'role' => 'form', 'file' => true)) !!}
+               {!! Form::model($school, array('route' => array('settings.school.update', $school->id), 'method' => 'PUT', 'class' => 'form-horizontal', 'role' => 'form', 'files' => true)) !!}
                 <fieldset>
                   <legend>Basic Information</legend>
 

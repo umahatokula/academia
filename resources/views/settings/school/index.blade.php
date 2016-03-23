@@ -66,7 +66,7 @@
         <table class="table table-hover table-stripped">
           <thead>
             <tr>
-              <td colspan="2" style="text-align:center; font-size:1.5em">Set Promotion Average</td>
+              <td colspan="2" style="text-align:center; font-size:1.5em">Set Discount Types</td>
             </tr>
           </thead>
           <tbody>
@@ -81,7 +81,7 @@
             <td style="text-align:center">Staff</td>
             <td style="text-align:center"> 
               <input {!! ($school->staff_discount == 1) ? 'checked' : ' ' !!}  type="checkbox" value="1" name="staff_discount" class="form-control">
-            </td>/td>
+            </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right">

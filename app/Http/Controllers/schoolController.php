@@ -81,16 +81,26 @@ class schoolController extends Controller
         // dd($data);
 
         if (is_null($data)){
-            $school = School::create($request->all());
-            // dd($school->id);
 
-            $imageName = $school->id.'.'.$request->logo->getClientOriginalExtension();
+            if($request->logo->getClientOriginalExtension() == 'png'){
 
-            // $imageName = str_replace(' ', '-', $request->name).'.'.$request->logo->getClientOriginalExtension();
+                $school = School::create($request->all());
+                // dd($school->id);
 
-            $request->logo->move(base_path().'/public/assets/images/logo/', $imageName);
+                // $imageName = $school->id.'.'.$request->logo->getClientOriginalExtension();
+                $imageName = '1'.'.'.$request->logo->getClientOriginalExtension();
 
-            return redirect()->to('settings/school');
+                $request->logo->move(base_path().'/public/assets/images/logo/', $imageName);
+
+                return redirect()->to('settings/school');
+
+            } else {
+
+                session()->flash('flash_message', 'Only .png images are allowed.');
+
+                return redirect()->back();
+            }
+            
 
         }else{
             session()->flash('flash_message', 'School information has already been entered. You can update.');
@@ -133,37 +143,48 @@ class schoolController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request->logo);
-        $rules = [  
-        'name'              => 'required',
-        'logo'              => 'required',
-        'line1'             => 'required',
-        'line2'             => 'required',
-        'line3'             => 'required',
-        'bank_id'           => 'required',
-        'account_name'      => 'required',
-        'account_number'    => 'required'];
-        $this->validate($request, $rules);
+        if($request->logo->getClientOriginalExtension() == 'png'){
 
-        $school = School::find(1); 
+            $rules = [  
+            'name'              => 'required',
+            'logo'              => 'required',
+            'line1'             => 'required',
+            'line2'             => 'required',
+            'line3'             => 'required',
+            'bank_id'           => 'required',
+            'account_name'      => 'required',
+            'account_number'    => 'required'];
+            $this->validate($request, $rules);
 
-        $school->name = $request->name;
-        $school->logo = $request->logo;
-        $school->phone = $request->phone;
-        $school->email = $request->email;
-        $school->swift_code = $request->swift_code;
-        $school->line1 = $request->line1;
-        $school->line2 = $request->line2;
-        $school->line3 = $request->line3;
-        $school->bank_id = $request->bank_id;
-        $school->account_name = $request->account_name;
-        $school->account_number = $request->account_number;
-        $school->save();
+            $school = School::find(1); 
 
-        // $imageName = $school->id.'.'.$request->logo->getClientOriginalExtension();
+            $school->name = $request->name;
+            $school->logo = $request->logo;
+            $school->phone = $request->phone;
+            $school->email = $request->email;
+            $school->swift_code = $request->swift_code;
+            $school->line1 = $request->line1;
+            $school->line2 = $request->line2;
+            $school->line3 = $request->line3;
+            $school->bank_id = $request->bank_id;
+            $school->account_name = $request->account_name;
+            $school->account_number = $request->account_number;
+            $school->save();
 
-        // $request->logo->move(base_path().'/public/assets/images/logo/', $imageName);
+            // $imageName = $school->id.'.'.$request->logo->getClientOriginalExtension();
+            $imageName = '1'.'.'.$request->logo->getClientOriginalExtension();
 
-        return redirect()->to('settings/school');
+            $request->logo->move(base_path().'/public/assets/images/logo/', $imageName);
+
+            return redirect()->to('settings/school');
+
+        } else {
+
+            session()->flash('flash_message', 'Only .png images are allowed. Info NOT updated');
+
+            return redirect()->back();
+        }
+        
     }
 
     /**

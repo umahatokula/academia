@@ -186,7 +186,7 @@
         });
         html.push('</select>');
 
-      $('#school_banks').append("
+      $('#school_banks').append("\
         <div class='form-group {{ $errors->has('address')? 'has-error' : ''}}'>\
                     <div class='col-sm-3'>\
                     {!! Form::label('bank_id', 'Bank', array('class' => 'control-label', 'for' => 'bank_id')) !!}\
@@ -205,7 +205,7 @@
                     <div class='col-sm-1'>\
                       <div class='btn btn-xs btn-info addBtn' onclick='addRow()'>+</div>\
                     </div>\
-                  </div>
+                  </div>\
         ");
       
   }
