@@ -15,6 +15,7 @@ use \App\Student;
 use \App\Invoice;
 use \App\CurrentTerm;
 use \App\SchoolFeesPayment;
+use \App\TransactionMode;
 
 use DB;
 
@@ -120,6 +121,8 @@ class paymentsController extends Controller
 
         $session = session()->get('current_session');
         $term = session()->get('current_term');
+
+        $data['transaction_modes'] = TransactionMode::lists('transaction_mode', 'id')->prepend('Please Select');
 
         //current session invoice table
         $table = 'invoices_'.$session.'_'.$term;
@@ -258,31 +261,35 @@ class paymentsController extends Controller
 
     public function store_pay_invoice(Request $request) {
         // dd($request->all());
-        $student_id = $request->student_id;
-        $class_id = $request->class_id;
-        $fee_schedule_code = $request->fee_schedule_code;
+        $student_id                     = $request->student_id;
+        $class_id                       = $request->class_id;
+        $fee_schedule_code              = $request->fee_schedule_code;
         // $elements_paid_for = $request->elements_paid_for;
-        $elements_paid_for = $request->elements_paid_for;
-        $this_term_amount = $request->this_term_amount;
-        $outstanding_fees = $request->outstanding_fees;
-        $outstanding_amounts = $request->outstanding_amounts;
-        $outstanding_fee_schedule_code = $request->outstanding_amounts;
+        $elements_paid_for              = $request->elements_paid_for;
+        $this_term_amount               = $request->this_term_amount;
+        $outstanding_fees               = $request->outstanding_fees;
+        $outstanding_amounts            = $request->outstanding_amounts;
+        $outstanding_fee_schedule_code  = $request->outstanding_amounts;
+        $transaction_mode_id            = $request->transaction_mode_id;
+        $transaction_id                 = $request->transaction_id;
 
         //-----CURRENT TERM============
         if (isset($elements_paid_for) && isset($this_term_amount)) {
 
             $sch_fee_pay_table = 'sch_fee_pay_'.session()->get('current_session').'_'.session()->get('current_term');
             DB::table($sch_fee_pay_table)->insert([
-                'student_id' => $student_id,
-                'fee_schedule_code' => $fee_schedule_code,
-                'outstanding_balance' => 0,
-                'amount' => array_sum($this_term_amount),
-                'elements_paid_for' => json_encode($elements_paid_for),
-                'session' => session()->get('current_session'),
-                'term_id' => session()->get('current_session'),
-                'class_id' => $class_id,
-                'updated_at' => date('Y-m-d H:i:s'),
-                'created_at' => date('Y-m-d H:i:s')
+                'student_id'            => $student_id,
+                'fee_schedule_code'     => $fee_schedule_code,
+                'outstanding_balance'   => 0,
+                'amount'                => array_sum($this_term_amount),
+                'elements_paid_for'     => json_encode($elements_paid_for),
+                'session'               => session()->get('current_session'),
+                'term_id'               => session()->get('current_session'),
+                'class_id'              => $class_id,
+                'transaction_mode_id'   => $transaction_mode_id,
+                'transaction_id'        => $transaction_id,
+                'updated_at'            => date('Y-m-d H:i:s'),
+                'created_at'            => date('Y-m-d H:i:s')
                 ]);
 
         }
@@ -294,15 +301,17 @@ class paymentsController extends Controller
             for ($i=0; $i < count($outstanding_fees); $i++) { 
                 $table_name = $outstanding_fees[$i];
                 DB::table($table_name)->insert([
-                    'student_id' => $student_id,
-                    'outstanding_balance' => 0,
-                    'amount' => $outstanding_amounts[$i],
-                    'elements_paid_for' => json_encode([]),
-                    'session' => $request->outstanding_session[$i],
-                    'term_id' => $request->outstanding_term[$i],
-                    'class_id' => $request->outstanding_class_id,
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'created_at' => date('Y-m-d H:i:s')
+                    'student_id'            => $student_id,
+                    'outstanding_balance'   => 0,
+                    'amount'                => $outstanding_amounts[$i],
+                    'elements_paid_for'     => json_encode([]),
+                    'session'               => $request->outstanding_session[$i],
+                    'term_id'               => $request->outstanding_term[$i],
+                    'class_id'              => $request->outstanding_class_id,
+                    'transaction_mode_id'   => $transaction_mode_id,
+                    'transaction_id'        => $transaction_id,
+                    'updated_at'            => date('Y-m-d H:i:s'),
+                    'created_at'            => date('Y-m-d H:i:s')
                     ]);
             }
 

@@ -40,6 +40,9 @@ class DatabaseSeeder extends Seeder
         $this->call('\paymentTypesTableSeeder');
         $this->call('\schoolsTableSeeder');
         $this->call('\feeElementsTableSeeder');
+        $this->call('\TransactionModeTableSeeder');
+
+        
         $this->command->info('Tables seeded!');
 
         Model::reguard();

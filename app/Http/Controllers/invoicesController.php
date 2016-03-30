@@ -389,6 +389,7 @@ class invoicesController extends Controller
 
         //get invoices
         $data['invoices'] = \DB::table('invoices_'.\Session::get('current_session').'_'.\Session::get('current_term'))->where('fee_schedule_code', $fee_schedule_code)->get();
+        // dd($data['invoices']);
 
         //create array to hole school session starting 10 yrs from current date
         $sessions = ['Select Session'];

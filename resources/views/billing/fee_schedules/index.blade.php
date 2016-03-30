@@ -105,7 +105,7 @@
                         </li> -->
                       </ul>
                     </div>
-                    <a href="{!! route('billing.invoices.bill_class', array($fee_schedule->fee_schedule_code)) !!}" class="btn btn-sm btn-secondary {{ $fee_schedule->status_id == 8? 'disabled': '' }}">Bill Class</a>
+                    <a href="{!! route('billing.invoices.bill_class', array($fee_schedule->fee_schedule_code)) !!}" class="btn btn-sm btn-secondary {!! $fee_schedule->status_id == 8? 'disabled': '' !!}">Bill Class</a>
                   </td>
                 </tr>
                 <?php $counter++ ?>

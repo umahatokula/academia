@@ -14,6 +14,7 @@ use \App\Student;
 use \App\studentClass;
 use \App\Subject;
 use \App\School;
+use \App\CurrentTerm;
 
 class resultsController extends Controller
 {
@@ -207,61 +208,71 @@ class resultsController extends Controller
         foreach ($students as $student) {
             foreach ($class->subjects as $subject) {
 
-                $table = 'class_results_'.\Session::get('current_session').'_'.\Session::get('current_term');
 
-                $positions_table = 'class_positions_'.\Session::get('current_session').'_'.\Session::get('current_term');
+                //ensure that at least a session variable has been set. If there is at least on session variable set, the system will run well else it'll throw an error
+                if (CurrentTerm::all() !== null)
+                {
 
-                $subject_exemption_table = 'subject_ex_'.\Session::get('current_session').'_'.\Session::get('current_term');
+                    $table = 'class_results_'.\Session::get('current_session').'_'.\Session::get('current_term');
+
+                    $positions_table = 'class_positions_'.\Session::get('current_session').'_'.\Session::get('current_term');
+
+                    $subject_exemption_table = 'subject_ex_'.\Session::get('current_session').'_'.\Session::get('current_term');
 
                 //initialize class results table
-                try{
-                    \DB::table($table)->insert([
-                        'class_id'      => $class->id,
-                        'student_id'    => $student->id,
-                        'subject_id'    => $subject->id,
-                        'created_at'    => date('Y-m-d H:i:s'),
-                        'updated_at'    => date('Y-m-d H:i:s'),
-                        ]);
+                    try{
+                        \DB::table($table)->insert([
+                            'class_id'      => $class->id,
+                            'student_id'    => $student->id,
+                            'subject_id'    => $subject->id,
+                            'created_at'    => date('Y-m-d H:i:s'),
+                            'updated_at'    => date('Y-m-d H:i:s'),
+                            ]);
 
-                }catch (\Illuminate\Database\QueryException $e){
-                    $errorCode = $e->errorInfo[1];
+                    }catch (\Illuminate\Database\QueryException $e){
+                        $errorCode = $e->errorInfo[1];
                     // if($errorCode == 1062){
                     //     session()->flash('flash_message', 'Session and Term variables have alreaddy been created.');
                     //     return \Redirect::back()->withInput($request->except('element_id', 'amount'));
                     // }
-                }
+                    }
 
 
                 //initialize class positions table
-                try{
-                    \DB::table($positions_table)
-                    ->insert([
-                        'class_id'      => $class->id,
-                        'student_id'    => $student->id
-                        ]);
-                }catch (\Illuminate\Database\QueryException $e){
-                    $errorCode = $e->errorInfo[1];
+                    try{
+                        \DB::table($positions_table)
+                        ->insert([
+                            'class_id'      => $class->id,
+                            'student_id'    => $student->id
+                            ]);
+                    }catch (\Illuminate\Database\QueryException $e){
+                        $errorCode = $e->errorInfo[1];
                     // if($errorCode == 1050){
                     //     session()->flash('flash_message', 'Result table for chosen session and term already exists.');
                     //     return \Redirect::back()->withInput();
                     // }
-                }
+                    }
 
 
                 //initialize subject exemption table
-                try{
-                    \DB::table($subject_exemption_table)
-                    ->insert([
-                        'class_id'      => $class->id,
-                        'student_id'    => $student->id,
-                        'subject_id'    => $subject->id,
-                        ]);
-                }catch (\Illuminate\Database\QueryException $e){
-                    $errorCode = $e->errorInfo[1];
-                    if($errorCode == 1050){
-                        session()->flash('flash_message', 'Result table for chosen session and term already exists.');
-                        return \Redirect::back()->withInput();
+                    try{
+                        \DB::table($subject_exemption_table)
+                        ->insert([
+                            'class_id'      => $class->id,
+                            'student_id'    => $student->id,
+                            'subject_id'    => $subject->id,
+                            ]);
+                    }catch (\Illuminate\Database\QueryException $e){
+                        $errorCode = $e->errorInfo[1];
+                        if($errorCode == 1050){
+                            session()->flash('flash_message', 'Result table for chosen session and term already exists.');
+                            return \Redirect::back()->withInput();
+                        }
                     }
+
+                } else {
+                    session()->flash('flash_message', 'Please set session variables. Go to Settings>school settings');
+                    return redirect()->back()->withInput();
                 }
             }
         }

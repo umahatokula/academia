@@ -28,9 +28,9 @@ class feeSchedulesController extends Controller
         // $data['fee_schedules'] = FeeSchedule::all();
         $table = 'fee_sch_'.session()->get('current_session').'_'.session()->get('current_term');
         $data['fee_schedules'] = DB::table($table)
+        ->join('fee_elements', 'fee_elements.id', '=', $table.'.fee_element_id')
         ->join('classes', 'classes.id', '=', $table.'.class_id')
         ->join('terms', 'terms.id', '=', $table.'.term_id')
-        ->join('fee_elements', 'fee_elements.id', '=', $table.'.fee_element_id')
         ->join('status', 'status.id', '=', $table.'.status_id')
         ->groupBy('fee_schedule_code')->get();
         // dd($data['fee_schedules']);

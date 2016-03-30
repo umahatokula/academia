@@ -14,7 +14,7 @@
 
 		});
 	</script>
-	<table class="table table-bordered table-stripped table-hover table-condensed">
+	<table class="table table-hover">
 		<thead>
 			<tr>
 				<td>Class</td>
@@ -37,9 +37,22 @@
 <?php if($fees && $fees = 1) { ?>
 <hr>
 <div class="row">
+	{!! Form::open(array('route' => 'accounts.payments.store_pay_invoice', 'class' => 'form-horizontal', 'role' => 'form')) !!}
+	<div class="col-md-12">
+	<table class="table table-hover">
+		<tr>
+			<td>Transaction Mode:</td>
+			<td>
+			{!! Form::select('transaction_mode_id', $transaction_modes, null, array('class' => 'form-control', 'id' => 'transaction_mode')) !!}</td>
+			<td>Transaction ID:</td>
+			<td>
+			{!! Form::text('transaction_id', null, array('class' => 'form-control', 'id' => 'transaction_id')) !!}</td>
+			<td>&nbsp</td>
+		</tr>
+	</table>
+	</div>
 	<div class="col-md-8">
-		{!! Form::open(array('route' => 'accounts.payments.store_pay_invoice', 'class' => 'form-horizontal', 'role' => 'form')) !!}
-		<table class="table table-bordered table-stripped table-hover table-condensed">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th colspan="5">{!! $student_info->fname.' '.$student_info->lname !!}</th>
@@ -183,7 +196,7 @@
 				});
 			});
 		</script>
-		<table class="table table-bordered table-stripped table-hover table-condensed" id="example-1">
+		<table class="table table-hover" id="example-1">
 			<thead>
 				<tr>
 					<th colspan="4">Summary Payment History</th>

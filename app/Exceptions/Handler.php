@@ -59,10 +59,10 @@ class Handler extends GrahamExceptionHandler
             return redirect($request->fullurl())->with('csrf_error', 'Taking too Long, please refresh the page and try again');
         }
 
-        if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
-        {
-             return redirect()->action('loginController@logout');
-        }
+        // if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
+        // {
+        //      return redirect()->action('loginController@logout');
+        // }
 
 
         return parent::render($request, $e);

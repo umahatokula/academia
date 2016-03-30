@@ -254,6 +254,8 @@ class NewTerm
 				$table->string('session');
 				$table->integer('term_id');
 				$table->integer('class_id');
+				$table->integer('transaction_mode_id')->nullable();
+				$table->string('transaction_id')->nullable();
 				$table->integer('status_id')->default(1);
 				$table->softDeletes();
 				$table->timestamps();

@@ -6,8 +6,7 @@
 
     <div class="panel panel-default">
       <div class="panel-body">
-        <a href="{!! route('settings.school.create') !!}"  class="btn btn-secondary btn-xs {!! ($school) ? 'disabled' : '' !!}">set school info</a>
-        <a href="{!! route('settings.school.edit') !!}"  class="btn btn-purple btn-xs">update school info</a>
+        <a href="{!! route('settings.school.edit') !!}"  class="btn btn-purple btn-xs">set school info</a>
         @if($school)
         <table class="table table-stripped table-hover">
           <thead>
@@ -85,8 +84,7 @@
           </tr>
           <tr>
             <td colspan="2" style="text-align:right">
-              <button class="btn btn-secondary btn-xs  {!! ($school->position_avg) ? 'disabled' : '' !!}">Set</button>
-              <button class="btn btn-purple btn-xs">Update</button>
+              <button class="btn btn-purple btn-xs">set</button>
             </td>
           </tr>
           {!! Form::close() !!}
@@ -130,8 +128,7 @@
           </tr>
           <tr>
             <td colspan="2" style="text-align:right">
-              <button class="btn btn-secondary btn-xs {!! ($current_term) ? 'disabled' : '' !!}">New Term</button>
-              <button class="btn btn-purple btn-xs">Update</button>
+              <button class="btn btn-purple btn-xs">set</button>
             </td>
           </tr>
           {!! Form::close() !!}
@@ -163,8 +160,7 @@
           </tr>
           <tr>
             <td colspan="2" style="text-align:right">
-              <button class="btn btn-secondary btn-xs  {!! ($school->promotion_avg) ? 'disabled' : '' !!}">Set</button>
-              <button class="btn btn-purple btn-xs">Update</button>
+              <button class="btn btn-purple btn-xs">set</button>
             </td>
           </tr>
           {!! Form::close() !!}
